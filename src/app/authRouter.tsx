@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,7 +17,7 @@ const AuthRouter = (props: any) => {
 
   const redirect = (
     isLoading: boolean,
-    firebaseUser: User | null | undefined
+    firebaseUser: User | null | undefined,
   ) => {
     if (!isLoading) {
       if (firebaseUser) {

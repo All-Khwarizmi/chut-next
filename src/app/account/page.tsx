@@ -26,7 +26,7 @@ export default function AccountPage() {
       setPortalUrl(portalUrl);
     };
     getPortalUrlOnFirstLoad();
-  }, []);
+  }, [app]);
 
   useEffect(() => {
     const checkPremium = async () => {
@@ -45,7 +45,7 @@ export default function AccountPage() {
     router.push(checkoutUrl);
     console.log("upgrade to premium");
   };
-  const manageSubscription = async () => {
+  const manageSubscription = () => {
     console.log(`manage subscription...`);
 
     // const portalUrl = await getPortalUrl(app);
@@ -92,18 +92,18 @@ export default function AccountPage() {
       </div>
     </button>
   );
-  const pricingButton = (
-    <button
-      onClick={() => {
-        // router.push(stripeSession.url);
-        // console.log(sessionURL);
-      }}
-      className="rounded-lg bg-orange-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
-    >
-      {" "}
-      Pricing
-    </button>
-  );
+  //   const pricingButton = (
+  //     <button
+  //       onClick={() => {
+  //         // router.push(stripeSession.url);
+  //         // console.log(sessionURL);
+  //       }}
+  //       className="rounded-lg bg-orange-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
+  //     >
+  //       {" "}
+  //       Pricing
+  //     </button>
+  //   );
 
   const accountSummary = (
     <div>
