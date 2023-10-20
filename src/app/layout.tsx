@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import AuthRouter from "./authRouter";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <AuthRouter>
+          {" "}
+          <div className="flex h-screen w-full flex-col  items-center justify-center gap-4 bg-slate-900 text-white">
+            <TRPCReactProvider headers={headers()}>
+              {children}
+            </TRPCReactProvider>
+          </div>
+        </AuthRouter>
       </body>
     </html>
   );

@@ -1,65 +1,63 @@
-import Link from "next/link";
+"use client";
 
-import { CreatePost } from "~/app/_components/create-post";
-import { api } from "~/trpc/server";
+import { useRouter } from "next/navigation";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { initFirebase } from "./firebase";
 
-export default async function Home() {
-  const hello = await api.post.hello.query({ text: "from tRPC" });
+export default function Home() {
+  const router = useRouter();
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-2xl text-white">
-            {hello ? hello.greeting : "Loading tRPC query..."}
-          </p>
-        </div>
+  const app = initFirebase();
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-        <CrudShowcase />
-      </div>
-    </main>
+  const signIn = async () => {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    if (user) {
+      goToAccount();
+    }
+  };
+  const rightArrow = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+      />
+    </svg>
   );
-}
 
-async function CrudShowcase() {
-  const latestPost = await api.post.getLatest.query();
+  const goToAccount = () => {
+    router.push("/account");
+  };
 
   return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
-    </div>
+    <>
+      <div className="text-5xl font-bold md:text-6xl">
+        <span className="bg-gradient-to-tr from-teal-400 to-blue-500 bg-clip-text text-transparent">
+          my app
+        </span>
+      </div>
+      <div className="mb-8 text-xl font-light md:text-2xl">
+        Welcome! Let's get started.
+      </div>
+      <button
+        onClick={signIn}
+        className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
+      >
+        <div className="flex items-center gap-2 align-middle">
+          Login With Google {rightArrow}
+        </div>
+      </button>
+    </>
   );
 }
