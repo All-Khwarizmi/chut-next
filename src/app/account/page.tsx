@@ -25,7 +25,7 @@ export default function AccountPage() {
       const portalUrl = await getPortalUrl(app);
       setPortalUrl(portalUrl);
     };
-    getPortalUrlOnFirstLoad();
+    getPortalUrlOnFirstLoad().catch((e) => console.log(e));
   }, [app]);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function AccountPage() {
 
       setIsPremium(newPremiumStatus);
     };
-    checkPremium();
+    checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
 
   const upgradeToPremium = async () => {
@@ -54,7 +54,7 @@ export default function AccountPage() {
   };
 
   const signOut = () => {
-    auth.signOut();
+    auth.signOut().catch(() => console.log("Error signing out"));
     router.push("/");
   };
 

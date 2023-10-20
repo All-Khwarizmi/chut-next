@@ -48,7 +48,7 @@ export default function Home() {
         </span>
       </div>
       <div className="mb-8 text-xl font-light md:text-2xl">
-        Welcome! Let's get started.
+        Welcome! Let&apos;s get started.
       </div>
       <button
         onClick={signIn}
