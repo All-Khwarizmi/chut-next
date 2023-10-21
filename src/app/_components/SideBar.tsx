@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
             <SidebarLink href="/about">About</SidebarLink>
           </li>
           <li>
-            <SidebarLink href="/services">Services</SidebarLink>
+            <SidebarLink href="/pricing">Pricing</SidebarLink>
           </li>
           <li>
             <SidebarLink href="/account">Account</SidebarLink>
