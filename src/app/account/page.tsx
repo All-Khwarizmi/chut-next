@@ -1,7 +1,5 @@
 "use client";
-
 import { useRouter } from "next/navigation";
-
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { initFirebase } from "../firebase";
@@ -9,11 +7,12 @@ import { getCheckoutUrl, getPortalUrl } from "~/stripe/stripePayment";
 import { PremiumPanel } from "./premiumPanel";
 import { StandardPanel } from "./standardPanel";
 import { getPremiumStatus } from "./getPremiumStatus";
+import Layout from "../_components/LayoutComponent";
 
 export default function AccountPage() {
   const app = initFirebase();
   const auth = getAuth(app);
-
+  const userImage = auth.currentUser?.photoURL;
   const userName = auth.currentUser?.displayName;
   const email = auth.currentUser?.email;
   const router = useRouter();
@@ -39,7 +38,7 @@ export default function AccountPage() {
     checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
 
-  const upgradeToPremium = async () => {
+   const upgradeToPremium = async () => {
     const myPriceId = "price_1O3KUlHIBlFqgcGsEJHDPxj6";
     const checkoutUrl = await getCheckoutUrl(app, myPriceId);
     router.push(checkoutUrl);
@@ -47,8 +46,6 @@ export default function AccountPage() {
   };
   const manageSubscription = () => {
     console.log(`manage subscription...`);
-
-    // const portalUrl = await getPortalUrl(app);
     console.log(`manage subscription ${portalUrl}`);
     router.push(portalUrl);
   };
@@ -58,68 +55,47 @@ export default function AccountPage() {
     router.push("/");
   };
 
-  const upgradeToPremiumButton = (
-    <button
-      onClick={upgradeToPremium}
-      className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
-    >
-      <div className="flex items-center justify-center gap-2 align-middle">
-        Upgrade To Premium
-      </div>
-    </button>
-  );
-
-  const managePortalButton = (
-    <button
-      onClick={() => {
-        manageSubscription();
-      }}
-      className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
-    >
-      <div className="flex items-center justify-center gap-2 align-middle">
-        Manage Subscription
-      </div>
-    </button>
-  );
-
-  const signOutButton = (
-    <button
-      onClick={signOut}
-      className="text-center text-lg text-slate-500 hover:text-slate-300 hover:underline"
-    >
-      <div className="flex items-center justify-center gap-2 align-middle">
-        Sign Out
-      </div>
-    </button>
-  );
-  //   const pricingButton = (
-  //     <button
-  //       onClick={() => {
-  //         // router.push(stripeSession.url);
-  //         // console.log(sessionURL);
-  //       }}
-  //       className="rounded-lg bg-orange-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
-  //     >
-  //       {" "}
-  //       Pricing
-  //     </button>
-  //   );
-
-  const accountSummary = (
-    <div>
-      <div className="mb-1 text-slate-500">Signed in as {userName}</div>
-      <div className="text-xl text-slate-300">{email}</div>
-    </div>
-  );
-  const statusPanel = isPremium ? <PremiumPanel /> : <StandardPanel />;
-  const memberButton = isPremium ? managePortalButton : upgradeToPremiumButton;
-
   return (
-    <div className="flex flex-col gap-8">
-      {accountSummary}
-      {statusPanel}
-      {memberButton}
-      {signOutButton}
-    </div>
+    <Layout
+      isUserLoggedIn={auth.currentUser ? true : false}
+      isPremiumUser={isPremium}
+    >
+      <div className="flex flex-col gap-8 p-4 md:p-8 lg:p-12">
+        <div className="text-center">
+          <img
+            className="mx-auto block    h-auto w-32 rounded-full md:h-auto md:w-48 lg:h-auto lg:w-64"
+            src={`${userImage ? userImage : "/chut-carre.png"}`}
+            alt="Chut application logo"
+          />
+        </div>
+        <div className="text-center">
+          <div className="mb-1 text-slate-500">Signed in as {userName}</div>
+          <div className="text-xl text-slate-300">{email}</div>
+        </div>
+        <div className="text-center">
+          {isPremium ? <PremiumPanel /> : <StandardPanel />}
+        </div>
+        <div className="text-center">
+          <button
+            onClick={isPremium ? manageSubscription : upgradeToPremium}
+            className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
+          >
+            <div className="flex items-center justify-center gap-2 align-middle">
+              {isPremium ? "Manage Subscription" : "Upgrade To Premium"}
+            </div>
+          </button>
+        </div>
+        <div className="text-center">
+          <button
+            onClick={signOut}
+            className="text-center text-lg text-slate-500 hover:text-slate-300 hover:underline"
+          >
+            <div className="flex items-center justify-center gap-2 align-middle">
+              Sign Out
+            </div>
+          </button>
+        </div>
+      </div>
+    </Layout>
   );
 }

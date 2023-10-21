@@ -25,14 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <AuthRouter>
-          {" "}
-          <div className="flex h-screen w-full flex-col  items-center justify-center gap-4 bg-slate-900 text-white">
-            <TRPCReactProvider headers={headers()}>
-              {children}
-            </TRPCReactProvider>
-          </div>
-        </AuthRouter>
+        {" "}
+        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
       </body>
     </html>
   );
