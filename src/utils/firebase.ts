@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { env } from "~/env.mjs";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,7 +16,6 @@ const firebaseConfig = {
   messagingSenderId: "919266283531",
   appId: "1:919266283531:web:b021c5d4662f2d02e4f70e",
   measurementId: "G-ZLEDY9DE6X",
-  
 };
 
 // Initialize Firebase
@@ -25,3 +25,4 @@ export const analytics = isSupported().then((yes) =>
 );
 
 export const initFirebase = () => app;
+export const storageBucket = getStorage(app);

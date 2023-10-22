@@ -2,7 +2,7 @@ import { Auth, User } from "@firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
-import { getCheckoutUrl } from "~/stripe/stripePayment";
+import { getCheckoutUrl } from "~/utils/stripe/stripePayment";
 
 export const deleteUser = (user: User) => {
   const isUserSure = window.confirm("Are you sure? \nAny data will be lost");

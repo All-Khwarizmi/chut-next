@@ -4,7 +4,7 @@ import {
   createCheckoutSession,
   getStripePayments,
 } from "@stripe/firestore-stripe-payments";
-import { initFirebase } from "~/app/firebase";
+import { initFirebase } from "~/utils/firebase";
 
 const app = initFirebase();
 export const payments = getStripePayments(app, {

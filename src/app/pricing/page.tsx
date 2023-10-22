@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { initFirebase } from "../firebase";
+import { initFirebase } from "../../utils/firebase";
 import { getAuth } from "@firebase/auth";
 import { getPremiumStatus } from "../account/get-premium-status";
 import Layout from "../_components/layout-component";

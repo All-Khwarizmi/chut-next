@@ -1,14 +1,15 @@
 "use client";
 
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { initFirebase } from "./firebase";
+import { initFirebase } from "../utils/firebase";
 import { useEffect, useState } from "react";
 import { getPremiumStatus } from "./account/get-premium-status";
-import MeterPlayer from "./_components/meter-player";
+import MeterPlayer from "./_components/meter/meter-player";
 import { rightArrow } from "~/shared/helpers-elements";
 import { signIn } from "~/shared/helpers-fns";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+import { fetchSoundList, useStore } from "~/utils/stores";
 
 export default function Home() {
   const app = initFirebase();
@@ -17,6 +18,10 @@ export default function Home() {
   const [isPremium, setIsPremium] = useState(false);
   const [user, loading] = useAuthState(auth);
   const router = useRouter();
+  const [soundList, setSoundList] = useStore((state) => [
+    state.soundList,
+    state.setSoundList,
+  ]);
   useEffect(() => {
     const checkPremium = async () => {
       const newPremiumStatus = auth.currentUser
@@ -28,6 +33,10 @@ export default function Home() {
     checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
 
+  useEffect(() => {
+    fetchSoundList();
+    // console.log(soundList);
+  }, [soundList]);
   // JSX
   const leftSide = (
     <div className="h-full p-4  lg:flex-1 ">

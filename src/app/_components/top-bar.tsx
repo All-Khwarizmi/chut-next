@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getCheckoutUrl } from "~/stripe/stripePayment";
-import { initFirebase } from "../firebase";
+import { getCheckoutUrl } from "~/utils/stripe/stripePayment";
+import { initFirebase } from "../../utils/firebase";
 import { useRouter } from "next/navigation";
 
 interface TopBarProps {

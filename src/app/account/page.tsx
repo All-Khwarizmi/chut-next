@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Auth, getAuth } from "firebase/auth";
-import { initFirebase } from "../firebase";
-import { getPortalUrl } from "~/stripe/stripePayment";
+import { initFirebase } from "../../utils/firebase";
+import { getPortalUrl } from "~/utils/stripe/stripePayment";
 import { PremiumPanel } from "./premium-panel";
 import { StandardPanel } from "./standard-panel";
 import { getPremiumStatus } from "./get-premium-status";

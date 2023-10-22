@@ -3,45 +3,11 @@
 import { useState, useEffect } from "react";
 import { useStore } from "~/utils/stores";
 import * as Tone from "tone";
-import { getDecibel } from "~/utils/toneHelpers";
+import { getDecibel } from "~/utils/tone-helpers";
 interface RecordProps {
   threshold: number;
   isSound: boolean;
 }
-
-// export function RecordComponent({ threshold, sound, isSound }: RecordProps) {
-//   const isRecording = useStore((state) => state.isRecording);
-//   const setRecording = useStore((state) => state.setRecording);
-
-//   return (
-//     <>
-//       {isRecording ? (
-//         <div>
-//           <RequestPermission
-//             threshold={threshold}
-//             sound={sound}
-//             isSound={isSound}
-//           />
-//           <button
-//             className="rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
-//             onClick={() => setRecording(false)}
-//           >
-//             Stop
-//           </button>
-//         </div>
-//       ) : (
-//         <div>
-//           <button
-//             className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
-//             onClick={() => setRecording(true)}
-//           >
-//             Start Recording
-//           </button>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
 
 export function RequestPermission({ threshold, isSound }: RecordProps) {
   const meter = new Tone.Meter();
