@@ -14,7 +14,6 @@ interface StoreState {
   setSoundRef: (soundRef: string) => void;
 }
 
-
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
@@ -27,6 +26,6 @@ export const useStore = create<StoreState>()(
       setThreshold: (threshold: number) => set({ threshold }),
       setSoundRef: (soundRef: string) => set({ soundRef }),
     }),
-    { name: "chut-state" },
+    { name: "chut-state", skipHydration: true },
   ),
 );

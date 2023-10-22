@@ -7,7 +7,7 @@ import {
   Switch,
 } from "@mui/material";
 import React, { useState } from "react";
-import {  RequestPermission } from "./meter";
+import { RequestPermission } from "./meter";
 import { useStore } from "~/utils/stores";
 
 const MeterPlayer: React.FC = () => {
@@ -40,7 +40,6 @@ const MeterPlayer: React.FC = () => {
           {isRecording ? (
             <RequestPermission
               threshold={threshold}
-              sound={new Audio(soundUrl)}
               isSound={isSound}
             />
           ) : (

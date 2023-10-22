@@ -6,52 +6,56 @@ import * as Tone from "tone";
 import { getDecibel } from "~/utils/toneHelpers";
 interface RecordProps {
   threshold: number;
-  sound: HTMLAudioElement;
   isSound: boolean;
 }
 
-export function RecordComponent({ threshold, sound, isSound }: RecordProps) {
-  const isRecording = useStore((state) => state.isRecording);
-  const setRecording = useStore((state) => state.setRecording);
+// export function RecordComponent({ threshold, sound, isSound }: RecordProps) {
+//   const isRecording = useStore((state) => state.isRecording);
+//   const setRecording = useStore((state) => state.setRecording);
 
-  return (
-    <>
-      {isRecording ? (
-        <div>
-          <RequestPermission
-            threshold={threshold}
-            sound={sound}
-            isSound={isSound}
-          />
-          <button
-            className="rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
-            onClick={() => setRecording(false)}
-          >
-            Stop
-          </button>
-        </div>
-      ) : (
-        <div>
-          <button
-            className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
-            onClick={() => setRecording(true)}
-          >
-            Start Recording
-          </button>
-        </div>
-      )}
-    </>
-  );
-}
+//   return (
+//     <>
+//       {isRecording ? (
+//         <div>
+//           <RequestPermission
+//             threshold={threshold}
+//             sound={sound}
+//             isSound={isSound}
+//           />
+//           <button
+//             className="rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
+//             onClick={() => setRecording(false)}
+//           >
+//             Stop
+//           </button>
+//         </div>
+//       ) : (
+//         <div>
+//           <button
+//             className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+//             onClick={() => setRecording(true)}
+//           >
+//             Start Recording
+//           </button>
+//         </div>
+//       )}
+//     </>
+//   );
+// }
 
-export function RequestPermission({ threshold, sound, isSound }: RecordProps) {
+export function RequestPermission({ threshold, isSound }: RecordProps) {
   const meter = new Tone.Meter();
   const isRecording = useStore((state) => state.isRecording);
+  const [soundUrl, setSoundRef] = useStore((state) => [
+    state.soundRef,
+    state.setSoundRef,
+  ]);
 
   useEffect(() => {
     const mic = new Tone.UserMedia();
     mic.open();
     mic.connect(meter);
+    Tone.context.resume();
 
     return () => {
       mic.close();
@@ -63,7 +67,7 @@ export function RequestPermission({ threshold, sound, isSound }: RecordProps) {
       <Meter
         meter={meter}
         threshold={threshold}
-        sound={sound}
+        sound={new Audio(soundUrl)}
         isSound={isSound}
       />
     </>
