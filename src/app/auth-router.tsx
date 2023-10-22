@@ -27,9 +27,26 @@ const AuthRouter = (props: any) => {
       }
     }
   };
+  const redirectSwitch = (
+    isLoading: boolean,
+    firebaseUser: User | null | undefined,
+  ) => {
+    if (!isLoading) {
+      console.log(`Path name: ${pathName}`);
+
+      switch (pathName) {
+        case "/account":
+          if (!firebaseUser) {
+            console.log(`Is user?: ${!!firebaseUser}`);
+
+            router.push(HOME_ROUTE);
+          }
+      }
+    }
+  };
 
   useEffect(() => {
-    redirect(loading, user);
+    redirectSwitch(loading, user);
   }, [loading, user, pathName]);
 
   if (loading) {

@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { initFirebase } from "./firebase";
-import Layout from "./_components/LayoutComponent";
+import Layout from "./_components/layout-component";
 import { useEffect, useState } from "react";
-import { getPremiumStatus } from "./account/getPremiumStatus";
+import { getPremiumStatus } from "./account/get-premium-status";
 import MeterPlayer from "./_components/meter-player";
 
 export default function Home() {
@@ -63,14 +63,7 @@ export default function Home() {
         <div className="h-full p-4  lg:flex-1 ">
           <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
             <MeterPlayer />
-            {/* <button
-                onClick={signIn}
-                className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
-              >
-                <div className="flex items-center gap-2 align-middle">
-                  Login With Google {rightArrow}
-                </div>
-              </button> */}
+        
           </div>
         </div>
         <div className=" h-full bg-slate-300  p-4 lg:flex-1">
@@ -89,6 +82,14 @@ export default function Home() {
             >
               <div className="flex items-center gap-2 align-middle">
                 Get Started {rightArrow}
+              </div>
+            </button>
+            <button
+              onClick={signIn}
+              className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
+            >
+              <div className="flex items-center gap-2 align-middle">
+                Login With Google {rightArrow}
               </div>
             </button>
           </div>

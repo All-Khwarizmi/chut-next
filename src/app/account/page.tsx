@@ -1,12 +1,19 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { User, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { initFirebase } from "../firebase";
-import { getCheckoutUrl, getPortalUrl } from "~/stripe/stripePayment";
-import { PremiumPanel } from "./premiumPanel";
-import { StandardPanel } from "./standardPanel";
-import { getPremiumStatus } from "./getPremiumStatus";
+import { getPortalUrl } from "~/stripe/stripePayment";
+import { PremiumPanel } from "./premium-panel";
+import { StandardPanel } from "./standard-panel";
+import { getPremiumStatus } from "./get-premium-status";
+import {
+  deleteUser,
+  manageSubscription,
+  signOut,
+  upgradeToPremium,
+} from "./account-helpers";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function AccountPage() {
   const app = initFirebase();
@@ -14,15 +21,17 @@ export default function AccountPage() {
   const userImage = auth.currentUser?.photoURL;
   const userName = auth.currentUser?.displayName;
   const email = auth.currentUser?.email;
-  const router = useRouter();
   const [isPremium, setIsPremium] = useState(false);
   const [portalUrl, setPortalUrl] = useState("");
-
+  // const [user, loading] = useAuthState(auth);
+  const user = auth.currentUser;
+  
   useEffect(() => {
     const getPortalUrlOnFirstLoad = async () => {
       const portalUrl = await getPortalUrl(app);
       setPortalUrl(portalUrl);
     };
+
     getPortalUrlOnFirstLoad().catch((e) => console.log(e));
   }, [app]);
 
@@ -36,51 +45,6 @@ export default function AccountPage() {
     };
     checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
-
-  const upgradeToPremium = async () => {
-    const myPriceId = "price_1O3KUlHIBlFqgcGsEJHDPxj6";
-    const checkoutUrl = await getCheckoutUrl(app, myPriceId);
-    router.push(checkoutUrl);
-    console.log("upgrade to premium");
-  };
-  const manageSubscription = () => {
-    console.log(`manage subscription...`);
-    console.log(`manage subscription ${portalUrl}`);
-    router.push(portalUrl);
-  };
-
-  const user = auth.currentUser;
-  const deleteUser = (user: User) => {
-    const isUserSure = window.confirm("Are you sure? \nAny data will be lost");
-    if (isUserSure) {
-      const confirmationMsg = "Delete my account";
-      const userDeleteConfirmation = window.prompt(
-        `To confirm please type: \n\"${confirmationMsg}\"`,
-      );
-      if (
-        userDeleteConfirmation &&
-        userDeleteConfirmation === confirmationMsg
-      ) {
-        user
-          .delete()
-          .then(() => {
-            alert("Your account has been deleted");
-            router.push("/");
-          })
-          .catch((e) =>
-            alert(`Error happened trying to delete user:
-      Error: ${e}
-      Please signout and, then sign in and try to delete your account back again.
-      `),
-          );
-      }
-    }
-  };
-
-  const signOut = () => {
-    auth.signOut().catch(() => console.log("Error signing out"));
-    router.push("/");
-  };
 
   return (
     <div className="flex flex-col gap-8 p-4 md:p-8 lg:p-12">
@@ -100,7 +64,11 @@ export default function AccountPage() {
       </div>
       <div className="text-center">
         <button
-          onClick={isPremium ? manageSubscription : upgradeToPremium}
+          onClick={
+            isPremium
+              ? () => manageSubscription(portalUrl)
+              : () => upgradeToPremium(app)
+          }
           className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
         >
           <div className="flex items-center justify-center gap-2 align-middle">
@@ -110,7 +78,7 @@ export default function AccountPage() {
       </div>
       <div className="text-center">
         <button
-          onClick={signOut}
+          onClick={() => signOut(auth)}
           className="text-center text-lg text-slate-500 hover:text-slate-300 hover:underline"
         >
           <div className="flex items-center justify-center gap-2 align-middle">

@@ -2,8 +2,8 @@
 import * as React from "react";
 import { initFirebase } from "../firebase";
 import { getAuth } from "@firebase/auth";
-import { getPremiumStatus } from "../account/getPremiumStatus";
-import Layout from "../_components/LayoutComponent";
+import { getPremiumStatus } from "../account/get-premium-status";
+import Layout from "../_components/layout-component";
 import { env } from "~/env.mjs";
 
 function PricingPage() {

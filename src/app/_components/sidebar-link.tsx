@@ -15,14 +15,16 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ href, children }) => {
   const isLinkActive = href === router;
 
   return (
-    <Link href={href}>
-      <p
-        className={`block px-4 py-2 ${
-          isLinkActive ? "bg-blue-500 text-white" : ""
-        }`}
-      >
-        {children}
-      </p>
+    <Link className=" place-content-center rounded-lg  text-center" href={href}>
+      <div className="text-center">
+        <p
+          className={`block px-2 py-2 text-center md:px-4 ${
+            isLinkActive ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          {children}
+        </p>
+      </div>
     </Link>
   );
 };
