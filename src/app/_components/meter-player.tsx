@@ -35,17 +35,30 @@ const MeterPlayer: React.FC = () => {
 
   return (
     <>
-      <div className="flex h-screen items-center space-x-12 text-center">
+      <div className="flex h-screen space-x-12 pt-20 text-center">
         <div className="">
           {isRecording ? (
-            <RequestPermission
-              threshold={threshold}
-              isSound={isSound}
-            />
+            <RequestPermission threshold={threshold} isSound={isSound} />
           ) : (
             <p className="pb-5 text-9xl"> 😴</p>
           )}
-          <div className="flex place-content-center">
+          <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <Slider
+              className=""
+              aria-label="Threshold"
+              sx={{ width: 300, height: 10 }}
+              min={30}
+              max={110}
+              step={5}
+              valueLabelDisplay={"auto"}
+              value={threshold}
+              onChange={(_, val) => {
+                console.log(`Threshold is ${val}`);
+                setThreshold(Array.isArray(val) ? val[0]! : val);
+              }}
+            />
+          </Stack>
+          <div className="flex place-content-center pt-5">
             <form className="pb-6">
               <FormGroup sx={{ placeItems: "center", paddingBottom: 3 }}>
                 <FormControlLabel
@@ -63,28 +76,6 @@ const MeterPlayer: React.FC = () => {
                 selectedSound={soundUrl}
                 onSoundChange={handleSoundChange}
               />
-              <p className="pb-2 text-xl"> Threshold </p>
-              <Stack
-                spacing={2}
-                direction="row"
-                sx={{ mb: 1 }}
-                alignItems="center"
-              >
-                <Slider
-                  className=""
-                  aria-label="Threshold"
-                  sx={{ width: 300, height: 10 }}
-                  min={30}
-                  max={110}
-                  step={5}
-                  valueLabelDisplay={"auto"}
-                  value={threshold}
-                  onChange={(_, val) => {
-                    console.log(`Threshold is ${val}`);
-                    setThreshold(Array.isArray(val) ? val[0]! : val);
-                  }}
-                />
-              </Stack>
             </form>
           </div>
           {isRecording ? (

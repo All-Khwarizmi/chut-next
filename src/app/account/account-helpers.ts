@@ -1,5 +1,6 @@
 import { Auth, User } from "@firebase/auth";
 import { FirebaseApp } from "firebase/app";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 import { getCheckoutUrl } from "~/stripe/stripePayment";
 
@@ -33,14 +34,13 @@ export const manageSubscription = (portalUrl: string) => {
   useRouter().push(portalUrl);
 };
 
-export const signOut = (auth: Auth) => {
-  auth.signOut().catch(() => console.log("Error signing out"));
-  useRouter().push("/");
-};
-
 export const upgradeToPremium = async (app: FirebaseApp) => {
   const myPriceId = "price_1O3KUlHIBlFqgcGsEJHDPxj6";
   const checkoutUrl = await getCheckoutUrl(app, myPriceId);
   useRouter().push(checkoutUrl);
   console.log("upgrade to premium");
+};
+export const signOut = (router: AppRouterInstance, auth: Auth) => {
+  auth.signOut().catch(() => console.log("Error signing out"));
+  router.push("/");
 };

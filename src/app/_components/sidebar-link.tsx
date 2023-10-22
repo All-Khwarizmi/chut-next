@@ -17,13 +17,13 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ href, children }) => {
   return (
     <Link className=" place-content-center rounded-lg  text-center" href={href}>
       <div className="text-center">
-        <p
+        <div
           className={`block px-2 py-2 text-center md:px-4 ${
             isLinkActive ? "bg-blue-500 text-white" : ""
           }`}
         >
           {children}
-        </p>
+        </div>
       </div>
     </Link>
   );

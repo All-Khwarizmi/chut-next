@@ -1,10 +1,5 @@
 "use client";
-import {
-  MdAccountBalance,
-  MdHome,
-  MdInfo,
-  MdPriceChange,
-} from "react-icons/md";
+import { MdAccountCircle, MdDns, MdHome, MdPriceChange } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import SidebarLink from "./sidebar-link";
 
@@ -38,7 +33,7 @@ const Sidebar: React.FC = () => {
             <SidebarLink href="/about">
               {isSmallScreen ? (
                 <div className="flex place-content-center">
-                  <MdInfo className="text-2xl" />
+                  <MdDns className="text-2xl" />
                 </div>
               ) : (
                 "About"
@@ -60,7 +55,7 @@ const Sidebar: React.FC = () => {
             <SidebarLink href="/account">
               {isSmallScreen ? (
                 <div className="flex place-content-center">
-                  <MdAccountBalance className="text-2xl" />
+                  <MdAccountCircle className="text-2xl" />
                 </div>
               ) : (
                 "Account"

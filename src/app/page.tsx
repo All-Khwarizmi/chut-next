@@ -1,23 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { initFirebase } from "./firebase";
-import Layout from "./_components/layout-component";
 import { useEffect, useState } from "react";
 import { getPremiumStatus } from "./account/get-premium-status";
 import MeterPlayer from "./_components/meter-player";
+import { rightArrow } from "~/shared/helpers-elements";
+import { signIn } from "~/shared/helpers-fns";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const router = useRouter();
-
   const app = initFirebase();
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const userName = auth.currentUser?.displayName;
-  const email = auth.currentUser?.email;
   const [isPremium, setIsPremium] = useState(false);
-  const [portalUrl, setPortalUrl] = useState("");
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
   useEffect(() => {
     const checkPremium = async () => {
       const newPremiumStatus = auth.currentUser
@@ -28,75 +27,69 @@ export default function Home() {
     };
     checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
-  const signIn = async () => {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
 
-    if (user) {
-      goToAccount();
-    }
-  };
-  const rightArrow = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="h-6 w-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-      />
-    </svg>
+  // JSX
+  const leftSide = (
+    <div className="h-full p-4  lg:flex-1 ">
+      <div className="flex h-full flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+        <MeterPlayer />
+      </div>
+    </div>
   );
-
-  const goToAccount = () => {
-    router.push("/account");
-  };
-
+  const mainTitle = (title: string) => (
+    <div className="px-5 text-4xl sm:text-4xl lg:text-6xl">{title}</div>
+  );
+  const subTitle = (subTitle: string) => (
+    <div
+      className=" px-5
+      sm:mb-8 sm:text-xl xl:text-2xl"
+    >
+      {subTitle}
+    </div>
+  );
+  const ctaButton = (text: string) => (
+    <button
+      onClick={() => alert("Call to action clicked")}
+      className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+    >
+      <div className="flex items-center gap-2 align-middle">
+        {text} {rightArrow}
+      </div>
+    </button>
+  );
+  const loginButton = (text: string) => (
+    <button
+      onClick={() => signIn(auth, provider, router)}
+      className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
+    >
+      <div className="flex items-center gap-2 align-middle">
+        {text} {rightArrow}
+      </div>
+    </button>
+  );
+  const rightSide = (
+    <div className=" h-full p-4 text-white lg:flex-1">
+      <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+        {user
+          ? mainTitle(
+              "De la Satisfaction à la Fidélité : Les Histoires de Succès de Chut",
+            )
+          : mainTitle("Welcome to Our Landing Page")}
+        {user
+          ? subTitle(
+              "Des Utilisateurs Qui ont Fait de la Concentration un Art de Vivre",
+            )
+          : subTitle("Explore our amazing features and get started today!")}
+        {user ? ctaButton("Get Started") : loginButton("Login with Google")}
+      </div>
+    </div>
+  );
   return (
     <>
-      <div className="grid h-full lg:flex lg:flex-row ">
-        <div className="h-full p-4  lg:flex-1 ">
-          <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
-            <MeterPlayer />
-        
-          </div>
-        </div>
-        <div className=" h-full bg-slate-300  p-4 lg:flex-1">
-          <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl text-black sm:text-5xl md:text-6xl">
-            {/* Your landing page hook with call to action goes here */}
-            {/* Example: */}
-            <div className="text-4xl sm:text-5xl md:text-6xl">
-              Welcome to Our Landing Page
-            </div>
-            <div className="mb-4 text-base sm:mb-8 sm:text-xl md:text-2xl">
-              Explore our amazing features and get started today!
-            </div>
-            <button
-              onClick={() => alert("Call to action clicked")}
-              className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
-            >
-              <div className="flex items-center gap-2 align-middle">
-                Get Started {rightArrow}
-              </div>
-            </button>
-            <button
-              onClick={signIn}
-              className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
-            >
-              <div className="flex items-center gap-2 align-middle">
-                Login With Google {rightArrow}
-              </div>
-            </button>
-          </div>
-        </div>
+      <div className=" h-full lg:flex lg:flex-row ">
+        {leftSide}
+        {rightSide}
       </div>
-
-      {/* </Layout> */}
     </>
   );
 }

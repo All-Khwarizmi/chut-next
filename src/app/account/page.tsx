@@ -1,7 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
+import { Auth, getAuth } from "firebase/auth";
 import { initFirebase } from "../firebase";
 import { getPortalUrl } from "~/stripe/stripePayment";
 import { PremiumPanel } from "./premium-panel";
@@ -11,9 +10,11 @@ import {
   deleteUser,
   manageSubscription,
   signOut,
+  // signOut,
   upgradeToPremium,
 } from "./account-helpers";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function AccountPage() {
   const app = initFirebase();
@@ -24,8 +25,9 @@ export default function AccountPage() {
   const [isPremium, setIsPremium] = useState(false);
   const [portalUrl, setPortalUrl] = useState("");
   // const [user, loading] = useAuthState(auth);
+  const router = useRouter();
   const user = auth.currentUser;
-  
+
   useEffect(() => {
     const getPortalUrlOnFirstLoad = async () => {
       const portalUrl = await getPortalUrl(app);
@@ -78,7 +80,7 @@ export default function AccountPage() {
       </div>
       <div className="text-center">
         <button
-          onClick={() => signOut(auth)}
+          onClick={() => signOut(router, auth)}
           className="text-center text-lg text-slate-500 hover:text-slate-300 hover:underline"
         >
           <div className="flex items-center justify-center gap-2 align-middle">
