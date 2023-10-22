@@ -59,15 +59,11 @@ export default function Home() {
 
   return (
     <>
-      <Layout
-        isUserLoggedIn={auth.currentUser ? true : false}
-        isPremiumUser={isPremium}
-      >
-        <div className="grid h-full lg:flex lg:flex-row ">
-          <div className="h-full p-4  lg:flex-1 ">
-            <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
-              <MeterPlayer />
-              {/* <button
+      <div className="grid h-full lg:flex lg:flex-row ">
+        <div className="h-full p-4  lg:flex-1 ">
+          <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+            <MeterPlayer />
+            {/* <button
                 onClick={signIn}
                 className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
               >
@@ -75,30 +71,29 @@ export default function Home() {
                   Login With Google {rightArrow}
                 </div>
               </button> */}
-            </div>
-          </div>
-          <div className=" h-full bg-slate-300  p-4 lg:flex-1">
-            <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl text-black sm:text-5xl md:text-6xl">
-              {/* Your landing page hook with call to action goes here */}
-              {/* Example: */}
-              <div className="text-4xl sm:text-5xl md:text-6xl">
-                Welcome to Our Landing Page
-              </div>
-              <div className="mb-4 text-base sm:mb-8 sm:text-xl md:text-2xl">
-                Explore our amazing features and get started today!
-              </div>
-              <button
-                onClick={() => alert("Call to action clicked")}
-                className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
-              >
-                <div className="flex items-center gap-2 align-middle">
-                  Get Started {rightArrow}
-                </div>
-              </button>
-            </div>
           </div>
         </div>
-      </Layout>
+        <div className=" h-full bg-slate-300  p-4 lg:flex-1">
+          <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl text-black sm:text-5xl md:text-6xl">
+            {/* Your landing page hook with call to action goes here */}
+            {/* Example: */}
+            <div className="text-4xl sm:text-5xl md:text-6xl">
+              Welcome to Our Landing Page
+            </div>
+            <div className="mb-4 text-base sm:mb-8 sm:text-xl md:text-2xl">
+              Explore our amazing features and get started today!
+            </div>
+            <button
+              onClick={() => alert("Call to action clicked")}
+              className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+            >
+              <div className="flex items-center gap-2 align-middle">
+                Get Started {rightArrow}
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* </Layout> */}
     </>

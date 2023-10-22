@@ -3,7 +3,7 @@ import SidebarLink from "./SidebarLink";
 
 const Sidebar: React.FC = () => {
   return (
-    <aside className=" sticky top-0 h-screen w-64 bg-gray-600">
+    <aside className=" h-screen   w-1/12 overflow-y-scroll bg-gray-600">
       <div className="p-4">
         <div className="text-center">
           <img

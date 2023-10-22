@@ -18,7 +18,7 @@ const TopBar: React.FC<TopBarProps> = ({ isUserLoggedIn, isPremiumUser }) => {
     console.log("upgrade to premium");
   };
   return (
-    <header className="bg-blue-500 p-4">
+    <header className="sticky left-64 bg-blue-500 p-4">
       <div className="flex items-center justify-between">
         <div>
           {isUserLoggedIn ? (

@@ -5,23 +5,22 @@ import Sidebar from "./SideBar";
 
 interface LayoutProps {
   children: ReactNode;
-  isUserLoggedIn: boolean;
-  isPremiumUser: boolean;
+  // isUserLoggedIn: boolean;
+  // isPremiumUser: boolean;
 }
 
 const Layout: React.FC<LayoutProps> = ({
   children,
-  isUserLoggedIn,
-  isPremiumUser,
+
 }) => {
   return (
-    <div className="  flex overflow-y-scroll bg-slate-900 text-white">
+    <div className="fixed flex h-full w-full bg-slate-900 text-white">
       {/* Sidebar */}
       <Sidebar /> {/* You can adjust isOpen as needed. */}
       <div className=" flex-1">
-        <TopBar isUserLoggedIn={isUserLoggedIn} isPremiumUser={isPremiumUser} />
+        {/* <TopBar isUserLoggedIn={isUserLoggedIn} isPremiumUser={isPremiumUser} /> */}
         <main
-          className="h-full place-items-center
+          className="h-full flex-1 place-items-center overflow-auto
         "
         >
           {children}

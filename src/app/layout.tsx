@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import AuthRouter from "./authRouter";
+import Layout from "./_components/LayoutComponent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         {" "}
-        <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        <Layout>
+          <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+        </Layout>
       </body>
     </html>
   );

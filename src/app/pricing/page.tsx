@@ -23,35 +23,30 @@ function PricingPage() {
   // Paste the stripe-pricing-table snippet in your React component
   return (
     <>
-      <Layout
-        isUserLoggedIn={auth.currentUser ? true : false}
-        isPremiumUser={isPremium}
-      >
-        <div className=" h-full flex-1 place-items-center justify-center gap-y-12">
-          <div className="py-8"></div>
-          <div>
-            <p className=" py-4 text-center text-5xl">
-              Devenez Premium et profitez d'une
-            </p>
-            <p className="text-center text-5xl">Expérience Personnalisée</p>
-          </div>
-          <div className="py-8"></div>
+      <div className=" h-full flex-1 place-items-center justify-center gap-y-12">
+        <div className="py-8"></div>
+        <div>
+          <p className=" py-4 text-center text-5xl">
+            Devenez Premium et profitez d'une
+          </p>
+          <p className="text-center text-5xl">Expérience Personnalisée</p>
+        </div>
+        <div className="py-8"></div>
 
-          <div className="grid grid-cols-3">
-            <div className=" col-start-2">
-              <script
-                async
-                src="https://js.stripe.com/v3/pricing-table.js"
-              ></script>
-              <stripe-pricing-table
-                className="h-screen"
-                pricing-table-id={`${env.NEXT_PUBLIC_PRICING_TABLE_ID}`}
-                publishable-key={`${env.NEXT_PUBLIC_PRICING_TABLE_KEY}`}
-              ></stripe-pricing-table>
-            </div>
+        <div className="grid grid-cols-3">
+          <div className=" col-start-2">
+            <script
+              async
+              src="https://js.stripe.com/v3/pricing-table.js"
+            ></script>
+            <stripe-pricing-table
+              className="h-screen"
+              pricing-table-id={`${env.NEXT_PUBLIC_PRICING_TABLE_ID}`}
+              publishable-key={`${env.NEXT_PUBLIC_PRICING_TABLE_KEY}`}
+            ></stripe-pricing-table>
           </div>
         </div>
-      </Layout>
+      </div>
     </>
   );
 }
