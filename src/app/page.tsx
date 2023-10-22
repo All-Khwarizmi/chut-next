@@ -6,6 +6,7 @@ import { initFirebase } from "./firebase";
 import Layout from "./_components/LayoutComponent";
 import { useEffect, useState } from "react";
 import { getPremiumStatus } from "./account/getPremiumStatus";
+import MeterPlayer from "./_components/meter-player";
 
 export default function Home() {
   const router = useRouter();
@@ -58,31 +59,6 @@ export default function Home() {
 
   return (
     <>
-      {/* <Layout
-        isUserLoggedIn={auth.currentUser ? true : false}
-        isPremiumUser={isPremium}
-      > */}
-      {/* <div>
-          <div className="text-5xl font-bold md:text-6xl">
-            <span className="bg-gradient-to-tr from-teal-400 to-blue-500 bg-clip-text text-transparent">
-              my app
-            </span>
-          </div>
-          <div className="mb-8 text-xl font-light md:text-2xl">
-            Welcome! Let&apos;'s get started.
-          </div>
-          <button
-            onClick={signIn}
-            className="rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
-          >
-            <div className="flex items-center gap-2 align-middle">
-              Login With Google {rightArrow}
-            </div>
-          </button>
-        </div>
-        <div>
-
-        </div> */}
       <Layout
         isUserLoggedIn={auth.currentUser ? true : false}
         isPremiumUser={isPremium}
@@ -90,20 +66,15 @@ export default function Home() {
         <div className="grid h-full lg:flex lg:flex-row ">
           <div className="h-full p-4  lg:flex-1 ">
             <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
-              <span className="bg-gradient-to-tr from-teal-400 to-blue-500 bg-clip-text text-transparent">
-                My App
-              </span>
-              <div className="mb-4 text-base sm:mb-8 sm:text-xl md:text-2xl">
-                Welcome! Let's get started.
-              </div>
-              <button
+              <MeterPlayer />
+              {/* <button
                 onClick={signIn}
                 className="rounded-lg bg-blue-600 p-3 px-5 text-base shadow-lg hover:bg-blue-700 sm:p-4 sm:px-6 sm:text-lg"
               >
                 <div className="flex items-center gap-2 align-middle">
                   Login With Google {rightArrow}
                 </div>
-              </button>
+              </button> */}
             </div>
           </div>
           <div className=" h-full bg-slate-300  p-4 lg:flex-1">
