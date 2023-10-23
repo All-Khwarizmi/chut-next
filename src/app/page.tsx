@@ -35,7 +35,6 @@ export default function Home() {
 
   useEffect(() => {
     fetchSoundList();
-    // console.log(soundList);
   }, [soundList]);
   // JSX
   const leftSide = (

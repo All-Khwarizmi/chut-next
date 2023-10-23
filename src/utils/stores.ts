@@ -39,7 +39,22 @@ export const useStore = create<StoreState>()(
         }));
       },
     }),
-    { name: "chut-state", skipHydration: true },
+    {
+      name: "chut-state",
+      onRehydrateStorage(state) {
+        console.log("hydration starts");
+        console.log(`Sound list= ${state.soundList.length}`);
+
+        // optional
+        return (state, error) => {
+          if (error) {
+            console.log("an error happened during hydration", error);
+          } else {
+            console.log("hydration finished");
+          }
+        };
+      },
+    },
   ),
 );
 
@@ -55,7 +70,6 @@ export const fetchSoundList = async () => {
       result.items.map((item) => {
         getDownloadURL(item).then((url) => {
           const soundObj = { label: item.name, value: url };
-          console.log(soundObj);
           soundOptionsArr.push(soundObj);
           useStore.setState((prev) => {
             if (
@@ -73,10 +87,6 @@ export const fetchSoundList = async () => {
           });
         });
       });
-      // soundOptionsArr.map((e) => console.log(e.label));
-      console.log(`Sound list length = ${soundOptionsArr.length}`);
-      console.log("Sound list fetched successfully");
-      // useStore.setState({ soundList: soundOptionsArr });
     })
     .catch((error) => {
       console.error("Error fetching sound list:", error);

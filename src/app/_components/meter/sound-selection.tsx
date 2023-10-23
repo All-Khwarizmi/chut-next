@@ -1,9 +1,6 @@
 import { useStore } from "~/utils/stores";
 
-interface SoundOption {
-  label: string;
-  value: string;
-}
+
 
 interface SoundSelectionProps {
   selectedSound: string;

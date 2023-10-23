@@ -30,13 +30,13 @@ const Sidebar: React.FC = () => {
             </SidebarLink>
           </li>
           <li>
-            <SidebarLink href="/about">
+            <SidebarLink href="/settings">
               {isSmallScreen ? (
                 <div className="flex place-content-center">
                   <MdDns className="text-2xl" />
                 </div>
               ) : (
-                "About"
+                "Settings"
               )}
             </SidebarLink>
           </li>
