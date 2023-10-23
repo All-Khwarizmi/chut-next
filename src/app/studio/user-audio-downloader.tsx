@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
-import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { ref, listAll, getDownloadURL, deleteObject } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
-import InboxIcon from "@mui/icons-material/Inbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import { useStore } from "~/utils/stores";
-import { MusicNote } from "@mui/icons-material";
+import { SoundOptions, useStore } from "~/utils/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import createTheme from "@mui/material/styles/createTheme";
-import { ListSubheader, ThemeProvider } from "@mui/material";
-import { text } from "stream/consumers";
+import { IconButton, ListSubheader } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 interface UserSoundsProps {
   pathName: string;
   title: string;
@@ -37,6 +32,11 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     userRecords,
     setUserRecords,
     update,
+    setUpdate,
+    getUserRecord,
+    getUserSound,
+    deleteUserRecords,
+    deleteUserSounds,
   ] = useStore((state) => [
     state.soundList,
     state.setSoundRef,
@@ -46,9 +46,18 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     state.userRecords,
     state.setUserRecords,
     state.update,
+    state.setUpdate,
+    state.getUserRecord,
+    state.getUserSound,
+    state.deleteUserRecords,
+    state.deleteUserSounds,
   ]);
+  const [checkUserSoundList, setCheckUserSoundList] = useState<SoundOptions[]>(
+    [],
+  );
 
   useEffect(() => {
+    // Get user sounds from firebase storage
     const fetchUserSounds = async () => {
       if (user) {
         const soundsRef = ref(
@@ -64,6 +73,10 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
             getDownloadURL(item).then((url) => {
               const soundObj = { label: item.name, value: url };
               if (pathName == "sounds") {
+                // Add to local state to check later if global state is up to date
+                setCheckUserSoundList((prev) => [...prev, soundObj]);
+
+                // Add to global state
                 useStore.setState((prev) => {
                   if (
                     !prev.userSounds.some(
@@ -79,6 +92,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
                   }
                 });
               } else if (pathName == "records") {
+                // Add to local state to check later if global state is up to date
                 useStore.setState((prev) => {
                   if (
                     !prev.userRecords.some(
@@ -103,7 +117,62 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     };
 
     fetchUserSounds();
+
+    // Update global state if local state is outdated
+    useStore.setState((prev) => {
+      if (pathName === "sounds") {
+        const filteredSoundList = prev.userSounds.filter((globalStateItem) =>
+          checkUserSoundList.some(
+            (localStateItem) => globalStateItem.label === localStateItem.label,
+          ),
+        );
+        prev.userSounds = filteredSoundList;
+        return { ...prev };
+      } else if (pathName === "records") {
+        const filteredSoundList = prev.userRecords.filter((globalStateItem) =>
+          checkUserSoundList.some(
+            (localStateItem) => globalStateItem.label === localStateItem.label,
+          ),
+        );
+        prev.userRecords = filteredSoundList;
+        return { ...prev };
+      } else {
+        return prev;
+      }
+    });
   }, [user, update]);
+
+  // Delete user sound from firebase storage
+  const handleDeleteUserSound = (
+    pathName: string,
+    fileName: string,
+    update: boolean,
+    setUpdate: (update: boolean) => void,
+  ) => {
+    const path =
+      pathName === "sounds"
+        ? `customers/${user?.uid}/sounds/${fileName}`
+        : `customers/${user?.uid}/records/${fileName}`;
+    // Reference to the file you want to delete
+    const fileRef = ref(storageBucket, path);
+
+    // Delete the file
+    deleteObject(fileRef)
+      .then(() => {
+        console.log("File deleted successfully.");
+      })
+      .catch((error) => {
+        console.error("Error deleting file:", error);
+      });
+    const record =
+      pathName === "sounds" ? getUserSound(fileName) : getUserRecord(fileName);
+    if (pathName === "sounds") {
+      deleteUserSounds(record);
+    } else if (pathName === "records") {
+      deleteUserRecords(record);
+    }
+  };
+
   const isSoundsOrRecords = () =>
     pathName === "sounds" ? userSounds : userRecords;
   const userSoundsBloc = (
@@ -129,6 +198,14 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
               <MusicNoteIcon />
             </ListItemIcon>
             <ListItemText primary={ele.label} />
+            <IconButton
+              onClick={() =>
+                handleDeleteUserSound(pathName, ele.label, update, setUpdate)
+              }
+              aria-label="comment"
+            >
+              <DeleteIcon sx={{ color: "red" }} />
+            </IconButton>
           </ListItemButton>
         );
       })}

@@ -21,6 +21,10 @@ interface StoreState {
   setUserSounds: (userSound: SoundOptions) => void;
   setUserRecords: (userRecord: SoundOptions) => void;
   setUpdate: (update: boolean) => void;
+  deleteUserSounds: (sound: SoundOptions) => void;
+  deleteUserRecords: (record: SoundOptions) => void;
+  getUserRecord: (recordId: string) => SoundOptions;
+  getUserSound: (soundId: string) => SoundOptions;
 }
 
 export interface SoundOptions {
@@ -59,6 +63,30 @@ export const useStore = create<StoreState>()(
         }));
       },
       setUpdate: (update: boolean) => set({ update }),
+      deleteUserSounds: (sound: SoundOptions) => {
+        return set((state) => {
+          return {
+            ...state,
+            userSounds: state.userSounds.filter((s) => s.value !== sound.value),
+          };
+        });
+      },
+      deleteUserRecords: (record: SoundOptions) => {
+        return set((state) => {
+          return {
+            ...state,
+            userRecords: state.userRecords.filter(
+              (r) => r.value !== record.value,
+            ),
+          };
+        });
+      },
+      getUserRecord: (recordId: string) => {
+        return get().userRecords.find((record) => record.label === recordId);
+      },
+      getUserSound: (soundId: string) => {
+        return get().userSounds.find((record) => record.label === soundId);
+      },
     }),
 
     {

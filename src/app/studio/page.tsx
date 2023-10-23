@@ -1,20 +1,12 @@
 "use client";
 
-import { useStore } from "~/utils/stores";
-import MeterPlayer from "../_components/meter/meter-player";
-import { SoundSelection } from "../_components/meter/sound-selection";
 import AudioUploader from "./audio-uploader";
-import UserSounds from "./user-audio-downloader";
 import VoiceRecorder from "./voice-recorder";
 import SelectedListItem from "../_components/meter/sound-list/sound-selected-list";
 
 export default function Page() {
-  const [soundSelected, setSoundRef] = useStore((state) => [
-    state.soundRef,
-    state.setSoundRef,
-  ]);
   const uploadSound = (
-    <div className="place flex flex-col items-center gap-y-3 pb-5">
+    <div className="place flex flex-col items-center gap-y-3 py-8">
       <div className="text-2xl font-bold">Upload sound</div>
       <AudioUploader />
     </div>

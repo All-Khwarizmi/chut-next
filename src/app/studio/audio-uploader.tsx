@@ -1,30 +1,71 @@
 import { getAuth } from "@firebase/auth";
-import { ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
+import { useStore } from "~/utils/stores";
 
 const AudioUploader: React.FC = () => {
+  const [uploadProgress, setUploadProgress] = useState<number>(0); // Added progress state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
-
+  const [update, setUpdate, setUserSounds] = useStore((state) => [
+    state.update,
+    state.setUpdate,
+    state.setUserSounds,
+  ]);
   const handleUploadFile = () => {
     if (selectedFile) {
       const storageRef = ref(
         storageBucket,
         `customers/${user?.uid}/sounds/${selectedFile!.name}`,
       );
-      const uploadResult = uploadBytes(storageRef, selectedFile!)
-        .then((result) => {
-          console.log("Filed uploaded successfully");
-          return result;
-        })
-        .catch((e) => {
-          alert(`The following error occured while uploading file: ${e}`);
-        });
-      uploadResult;
+
+      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+      // Listen for state changes and progress
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+          );
+          setUploadProgress(progress); // Update the progress state
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          console.error("Error uploading file:", error);
+          alert(`The following error occurred while uploading file: ${error}`);
+        },
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            // You can use downloadURL here if needed
+            setUserSounds({ label: selectedFile.name, value: downloadURL });
+            setUpdate(!update);
+            setSelectedFile(null); // Reset the input field
+            setUploadProgress(0); // Reset the progress
+          });
+        },
+      );
     }
   };
 
@@ -81,6 +122,19 @@ const AudioUploader: React.FC = () => {
           <p className="mt-4">Selected File: {selectedFile.name}</p>
         )}
       </div>
+      {uploadProgress > 0 && (
+        <div className="mt-2">
+          <div className="relative h-2 w-full bg-blue-200">
+            <div
+              className="h-2 bg-blue-500"
+              style={{ width: `${uploadProgress}%` }}
+            ></div>
+          </div>
+          <p className="mt-2 text-center text-sm">
+            Upload Progress: {uploadProgress}%
+          </p>
+        </div>
+      )}
       <div className="py-2"></div>
       <button
         onClick={handleUploadFile}
