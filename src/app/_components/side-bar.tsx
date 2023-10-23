@@ -1,5 +1,5 @@
 "use client";
-import { MdAccountCircle, MdDns, MdHome, MdPriceChange } from "react-icons/md";
+import { MdAccountCircle, MdMic, MdHome, MdPriceChange } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import SidebarLink from "./sidebar-link";
 
@@ -7,7 +7,7 @@ const Sidebar: React.FC = () => {
   const isSmallScreen = useMediaQuery({ maxWidth: 450 });
 
   return (
-    <aside className="h-screen w-1/6 overflow-y-scroll bg-gray-600 text-center  md:w-1/6 xl:w-2/12">
+    <aside className="bg-secondaryColor h-screen w-1/6 overflow-y-scroll text-center  md:w-1/6 xl:w-2/12">
       <div className="flex flex-col place-content-center gap-y-5">
         <div className="text-center">
           <img
@@ -30,13 +30,13 @@ const Sidebar: React.FC = () => {
             </SidebarLink>
           </li>
           <li>
-            <SidebarLink href="/settings">
+            <SidebarLink href="/studio">
               {isSmallScreen ? (
                 <div className="flex place-content-center">
-                  <MdDns className="text-2xl" />
+                  <MdMic className="text-2xl" />
                 </div>
               ) : (
-                "Settings"
+                "Studio"
               )}
             </SidebarLink>
           </li>

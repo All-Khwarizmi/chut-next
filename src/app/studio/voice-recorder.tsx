@@ -26,7 +26,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
     if (blob) {
       const storageRef = ref(
         storageBucket,
-        `customers/${user?.uid}/sounds/${blob!.text().then((e) => e)}`,
+        `customers/${user?.uid}/records/${blob!.text().then((e) => e)}`,
       );
       const uploadResult = uploadBytes(storageRef, blob!)
         .then((result) => {
@@ -47,7 +47,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
           noiseSuppression: true,
           echoCancellation: true,
         }}
-        downloadOnSavePress={true}
+        downloadOnSavePress={false}
         downloadFileExtension="webm"
       />
     </div>

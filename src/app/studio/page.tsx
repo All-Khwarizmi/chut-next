@@ -6,6 +6,7 @@ import { SoundSelection } from "../_components/meter/sound-selection";
 import AudioUploader from "./audio-uploader";
 import UserSounds from "./user-audio-downloader";
 import VoiceRecorder from "./voice-recorder";
+import SelectedListItem from "../_components/meter/sound-list/sound-selected-list";
 
 export default function Page() {
   const [soundSelected, setSoundRef] = useStore((state) => [
@@ -37,7 +38,9 @@ export default function Page() {
             <VoiceRecorder />
           </div>
         </div>
-        <div className="">4</div>
+        <div className="">
+          <SelectedListItem />
+        </div>
       </div>
     </>
   );

@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="fixed flex h-full w-full bg-slate-900 text-white">
+    <div className="bg-primaryColor fixed flex h-full w-full text-white">
       {/* Sidebar */}
       <Sidebar /> {/* You can adjust isOpen as needed. */}
       <div className=" flex-1">
