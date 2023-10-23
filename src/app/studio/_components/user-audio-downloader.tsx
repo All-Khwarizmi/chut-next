@@ -37,6 +37,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     getUserSound,
     deleteUserRecords,
     deleteUserSounds,
+    setSoundList,
   ] = useStore((state) => [
     state.soundList,
     state.setSoundRef,
@@ -51,6 +52,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     state.getUserSound,
     state.deleteUserRecords,
     state.deleteUserSounds,
+    state.setSoundList,
   ]);
   const [checkUserSoundList, setCheckUserSoundList] = useState<SoundOptions[]>(
     [],
@@ -147,7 +149,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     pathName: string,
     fileName: string,
     update: boolean,
-    setUpdate: (update: boolean) => void,
   ) => {
     const path =
       pathName === "sounds"
@@ -164,12 +165,16 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
       .catch((error) => {
         console.error("Error deleting file:", error);
       });
+
+    // Delete user record from global state
     const record =
       pathName === "sounds" ? getUserSound(fileName) : getUserRecord(fileName);
-    if (pathName === "sounds") {
-      deleteUserSounds(record);
-    } else if (pathName === "records") {
-      deleteUserRecords(record);
+    if (record) {
+      if (pathName === "sounds") {
+        deleteUserSounds(record);
+      } else if (pathName === "records") {
+        deleteUserRecords(record);
+      }
     }
   };
 
@@ -192,16 +197,22 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
           <ListItemButton
             key={crypto.randomUUID()}
             selected={ele.label === soundRef}
-            onClick={(event) => {}}
+            onClick={(_) => {
+              // 
+              if (soundRef !== ele.value) {
+                setSoundRef(ele.label);
+                if (!soundOptions.some((e) => e.value === ele.value)) {
+                  setSoundList(ele);
+                }
+              }
+            }}
           >
             <ListItemIcon>
               <MusicNoteIcon />
             </ListItemIcon>
             <ListItemText primary={ele.label} />
             <IconButton
-              onClick={() =>
-                handleDeleteUserSound(pathName, ele.label, update, setUpdate)
-              }
+              onClick={() => handleDeleteUserSound(pathName, ele.label, update)}
               aria-label="comment"
             >
               <DeleteIcon sx={{ color: "red" }} />
