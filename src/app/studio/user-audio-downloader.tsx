@@ -3,42 +3,97 @@ import { getAuth } from "firebase/auth";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
-interface UserSounds {
-  //   onSoundChange: (sound: string) => void;
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import InboxIcon from "@mui/icons-material/Inbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import { useStore } from "~/utils/stores";
+import { MusicNote } from "@mui/icons-material";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import createTheme from "@mui/material/styles/createTheme";
+import { ListSubheader, ThemeProvider } from "@mui/material";
+import { text } from "stream/consumers";
+interface UserSoundsProps {
+  pathName: string;
+  title: string;
 }
 export interface SoundOption {
   label: string;
   value: string;
 }
-const UserSounds: React.FC<UserSounds> = ({}) => {
+const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
-  const [userSounds, setUserSounds] = useState<SoundOption[]>([]);
+  const [
+    soundOptions,
+    setSoundRef,
+    soundRef,
+    userSounds,
+    setUserSounds,
+    userRecords,
+    setUserRecords,
+    update,
+  ] = useStore((state) => [
+    state.soundList,
+    state.setSoundRef,
+    state.soundRef,
+    state.userSounds,
+    state.setUserSounds,
+    state.userRecords,
+    state.setUserRecords,
+    state.update,
+  ]);
 
   useEffect(() => {
     const fetchUserSounds = async () => {
       if (user) {
-        const soundsRef = ref(storageBucket, `customers/${user.uid}/sounds`);
+        const soundsRef = ref(
+          storageBucket,
+          `customers/${user.uid}/${pathName}`,
+        );
 
         try {
           const soundsList = await listAll(soundsRef);
+          console.log(`Path name = ${pathName}`);
+
           soundsList.items.map((item) => {
             getDownloadURL(item).then((url) => {
               const soundObj = { label: item.name, value: url };
-              setUserSounds((prev) => {
-                if (
-                  !prev.some(
-                    (element) =>
-                      element.label === soundObj.label &&
-                      element.value === soundObj.value,
-                  )
-                ) {
-                  return [...prev, soundObj];
-                } else {
-                  return prev;
-                }
-              });
+              if (pathName == "sounds") {
+                useStore.setState((prev) => {
+                  if (
+                    !prev.userSounds.some(
+                      (sound) => sound.label === soundObj.label,
+                    )
+                  ) {
+                    prev.userSounds = [...prev.userSounds, soundObj];
+                    return {
+                      ...prev,
+                    };
+                  } else {
+                    return prev;
+                  }
+                });
+              } else if (pathName == "records") {
+                useStore.setState((prev) => {
+                  if (
+                    !prev.userRecords.some(
+                      (sound) => sound.label === soundObj.label,
+                    )
+                  ) {
+                    prev.userRecords = [...prev.userRecords, soundObj];
+                    return {
+                      ...prev,
+                    };
+                  } else {
+                    return prev;
+                  }
+                });
+              }
             });
           });
         } catch (error) {
@@ -48,32 +103,39 @@ const UserSounds: React.FC<UserSounds> = ({}) => {
     };
 
     fetchUserSounds();
-  }, [user]);
-
-  return (
-    <div>
-      <div className="py-3 text-2xl font-bold">User Sounds</div>
-      {userSounds.length > 0 ? (
-        <div className=" flex place-content-center pb-6">
-          <select
-            className="rounded-lg bg-slate-500 p-3 px-5 text-base shadow-lg  sm:p-4 sm:px-6 sm:text-lg"
-            onChange={(e) => {
-              console.log(e.target.value);
-              //   onSoundChange(e.target.value);
-            }}
+  }, [user, update]);
+  const isSoundsOrRecords = () =>
+    pathName === "sounds" ? userSounds : userRecords;
+  const userSoundsBloc = (
+    <List
+      sx={{ p: 2 }}
+      component="nav"
+      subheader={<li />}
+      aria-label="main mailbox folders"
+    >
+      <ListSubheader
+        sx={{ color: "text.primary", fontWeight: "bold", fontSize: 16 }}
+      >
+        {title}
+      </ListSubheader>
+      {isSoundsOrRecords().map((ele) => {
+        return (
+          <ListItemButton
+            key={crypto.randomUUID()}
+            selected={ele.label === soundRef}
+            onClick={(event) => {}}
           >
-            {userSounds.map((option) => (
-              <option key={option.value} value={option.label}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      ) : (
-        <p>No sounds found for the user.</p>
-      )}
-    </div>
+            <ListItemIcon>
+              <MusicNoteIcon />
+            </ListItemIcon>
+            <ListItemText primary={ele.label} />
+          </ListItemButton>
+        );
+      })}
+    </List>
   );
+
+  return <>{userSoundsBloc}</>;
 };
 
 export default UserSounds;

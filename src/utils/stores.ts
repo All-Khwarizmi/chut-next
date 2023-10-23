@@ -9,12 +9,18 @@ interface StoreState {
   threshold: number;
   soundRef: string;
   decibel: number;
+  update: boolean;
   soundList: SoundOptions[];
+  userSounds: SoundOptions[];
+  userRecords: SoundOptions[];
   setRecording: (isRecording: boolean) => void;
   setDecibel: (decibel: number) => void;
   setThreshold: (threshold: number) => void;
   setSoundRef: (soundRef: string) => void;
   setSoundList: (soundList: SoundOptions) => void;
+  setUserSounds: (userSound: SoundOptions) => void;
+  setUserRecords: (userRecord: SoundOptions) => void;
+  setUpdate: (update: boolean) => void;
 }
 
 export interface SoundOptions {
@@ -29,6 +35,9 @@ export const useStore = create<StoreState>()(
       soundRef: "./shhh.mp3", // Set your initial audio element here
       decibel: 0,
       soundList: [],
+      userRecords: [],
+      userSounds: [],
+      update: false,
       setRecording: (isRecording: boolean) => set({ isRecording }),
       setDecibel: (decibel: number) => set({ decibel }),
       setThreshold: (threshold: number) => set({ threshold }),
@@ -38,7 +47,20 @@ export const useStore = create<StoreState>()(
           soundList: [...state.soundList],
         }));
       },
+
+      setUserRecords: (userRecord: SoundOptions) => {
+        set((state) => ({
+          userRecords: [...state.userRecords, userRecord],
+        }));
+      },
+      setUserSounds: (userSound: SoundOptions) => {
+        set((state) => ({
+          userSounds: [...state.userSounds, userSound],
+        }));
+      },
+      setUpdate: (update: boolean) => set({ update }),
     }),
+
     {
       name: "chut-state",
       onRehydrateStorage(state) {

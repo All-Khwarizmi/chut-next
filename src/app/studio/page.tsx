@@ -13,33 +13,32 @@ export default function Page() {
     state.soundRef,
     state.setSoundRef,
   ]);
+  const uploadSound = (
+    <div className="place flex flex-col items-center gap-y-3 pb-5">
+      <div className="text-2xl font-bold">Upload sound</div>
+      <AudioUploader />
+    </div>
+  );
+  const recordSound = (
+    <div className=" flex place-content-center items-center pt-5">
+      <div className="place flex flex-col  items-center gap-y-3">
+        <div className="text-2xl font-bold ">Record sound</div>
+        <VoiceRecorder />
+      </div>
+    </div>
+  );
   return (
     <>
-      <div className="grid h-full grid-cols-2">
-        <div className="flex place-content-center items-center">
-          <div>
-            <div className="py-3 text-2xl font-bold"> List of sounds</div>
-            <SoundSelection
-              selectedSound={soundSelected}
-              onSoundChange={setSoundRef}
-            />
-            <UserSounds />
-          </div>
+      <div className="h-full lg:grid lg:grid-cols-2 ">
+        <div className=" flex flex-col place-content-start gap-y-5 p-5 pt-12">
+          {uploadSound}
+          <div className="border"></div>
+          {recordSound}
         </div>
-        <div className=" flex place-content-center items-center">
-          <div className="place flex flex-col items-center gap-y-3">
-            <div className="text-2xl font-bold">Upload sound</div>
-            <AudioUploader />
+        <div className="flex place-content-center p-5 pt-12 text-center">
+          <div className="flex flex-1 place-content-center">
+            <SelectedListItem />
           </div>
-        </div>
-        <div className=" flex place-content-center items-center">
-          <div className="place flex flex-col items-center gap-y-3">
-            <div className="text-2xl font-bold">Record sound</div>
-            <VoiceRecorder />
-          </div>
-        </div>
-        <div className="">
-          <SelectedListItem />
         </div>
       </div>
     </>

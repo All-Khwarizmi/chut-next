@@ -11,7 +11,9 @@ import { useStore } from "~/utils/stores";
 import { MusicNote } from "@mui/icons-material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import createTheme from "@mui/material/styles/createTheme";
-import { ThemeProvider } from "@mui/material";
+import { ListSubheader, ThemeProvider } from "@mui/material";
+import { text } from "stream/consumers";
+import UserSounds from "~/app/studio/user-audio-downloader";
 
 export default function SelectedListItem() {
   const [soundOptions, setSoundRef, soundRef] = useStore((state) => [
@@ -21,23 +23,88 @@ export default function SelectedListItem() {
   ]);
 
   const theme = createTheme({
+    
     palette: {
       background: {
         paper: "#6b7280",
       },
+      secondary: {
+        main: "#1B262C",
+      },
+
       text: {
-        primary: "#173A5E",
+        primary: "#FFFFFF",
         secondary: "#46505A",
       },
       action: {
         active: "#001E3C",
       },
     },
+    components: {
+      MuiListItemButton: {
+        // defaultProps: {
+        //   selected: true
+        // },
+        styleOverrides: {
+          root: ({ ownerState, theme }) => ({
+            ":hover": {
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.primary.main,
+
+              ".MuiListItemIcon-root": {
+                color: theme.palette.primary.main,
+              },
+            },
+
+            "&.Mui-selected": {
+              "&:hover": {
+                backgroundColor: theme.palette.secondary.main,
+              },
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.primary.main,
+
+              ".MuiListItemIcon-root": {
+                color: theme.palette.primary.main,
+              },
+            },
+            borderRadius: theme.spacing(2),
+          }),
+
+          // selected: ({ ownerState, theme }) => ({
+          //   backgroundColor: theme.palette.secondary.main,
+          //   color: theme.palette.primary.main,
+
+          //   ".MuiListItemIcon-root": {
+          //     color: theme.palette.primary.main
+          //   },
+
+          //   borderRadius: theme.spacing(2)
+          // })
+        },
+      },
+    },
   });
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-        <List component="nav" aria-label="main mailbox folders">
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          borderRadius: 5,
+        }}
+      >
+        <List
+          component="nav"
+          subheader={<li />}
+          aria-label="Sounds selector list"
+          sx={{
+            p: 2,
+          }}
+        >
+          <ListSubheader
+            sx={{ color: "text.primary", fontWeight: "bold", fontSize: 16 }}
+          >{`Sounds`}</ListSubheader>
           {soundOptions.map((ele) => {
             return (
               <ListItemButton
@@ -54,6 +121,8 @@ export default function SelectedListItem() {
           })}
         </List>
         <Divider />
+        <UserSounds pathName={"sounds"} title={"Your Sounds"} />
+        <UserSounds pathName={"records"} title={"Your Sounds Recorded"} />
       </Box>
     </ThemeProvider>
   );
