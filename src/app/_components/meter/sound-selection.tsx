@@ -1,22 +1,21 @@
 import { useStore } from "~/utils/stores";
 
-
-
 interface SoundSelectionProps {
-  selectedSound: string;
   onSoundChange: (sound: string) => void;
 }
 
 export const SoundSelection: React.FC<SoundSelectionProps> = ({
-  selectedSound,
   onSoundChange,
 }) => {
-  const soundOptions = useStore((state) => state.soundList);
+  const [soundOptions, soundRef] = useStore((state) => [
+    state.soundList,
+    state.soundRef,
+  ]);
   return (
     <div className=" flex place-content-center pb-6">
       <select
         className="rounded-lg bg-slate-500 p-3 px-5 text-base shadow-lg  sm:p-4 sm:px-6 sm:text-lg"
-        value={selectedSound}
+        value={soundRef}
         onChange={(e) => {
           console.log(e.target.value);
           onSoundChange(e.target.value);

@@ -12,9 +12,10 @@ interface RecordProps {
 export function RequestPermission({ threshold, isSound }: RecordProps) {
   const meter = new Tone.Meter();
   const isRecording = useStore((state) => state.isRecording);
-  const [soundUrl, setSoundRef] = useStore((state) => [
+  const [soundUrl, setSoundRef, soundList] = useStore((state) => [
     state.soundRef,
     state.setSoundRef,
+    state.soundList,
   ]);
 
   useEffect(() => {

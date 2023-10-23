@@ -198,9 +198,9 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
             key={crypto.randomUUID()}
             selected={ele.label === soundRef}
             onClick={(_) => {
-              // 
+              //
               if (soundRef !== ele.value) {
-                setSoundRef(ele.label);
+                setSoundRef(ele.value);
                 if (!soundOptions.some((e) => e.value === ele.value)) {
                   setSoundList(ele);
                 }

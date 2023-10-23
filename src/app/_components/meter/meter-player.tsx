@@ -1,15 +1,19 @@
 "use client";
 import {
+  Box,
   FormControlLabel,
   FormGroup,
   Slider,
   Stack,
   Switch,
+  ThemeProvider,
 } from "@mui/material";
 import React, { useState } from "react";
 import { RequestPermission } from "./meter";
 import { SoundOptions, useStore } from "~/utils/stores";
 import { SoundSelection } from "./sound-selection";
+import SoundList from "~/app/studio/_components/sound-list";
+import { theme } from "~/app/studio/_components/sound-selected-list";
 
 interface MeterPlayerProps {}
 
@@ -91,10 +95,19 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
           <div className="flex place-content-center pt-5">
             <form className="pb-6">
               {soundSwitch}
-              <SoundSelection
-                selectedSound={soundUrl}
-                onSoundChange={handleSoundChange}
-              />
+              <ThemeProvider theme={theme}>
+                <Box
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                    borderRadius: 5,
+                  }}
+                >
+                  <SoundList />
+                 
+                </Box>
+              </ThemeProvider>
             </form>
           </div>
           {startAndStopRecordingButton}
