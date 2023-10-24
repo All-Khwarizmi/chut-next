@@ -109,7 +109,7 @@ const AudioUploader: React.FC = () => {
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className="cursor-pointer border-2 border-dashed border-gray-300 p-4 text-center"
+        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 text-center   lg:py-8"
       >
         <input
           type="file"
@@ -121,27 +121,29 @@ const AudioUploader: React.FC = () => {
         {selectedFile && (
           <p className="mt-4">Selected File: {selectedFile.name}</p>
         )}
-      </div>
-      {uploadProgress > 0 && (
-        <div className="mt-2">
-          <div className="relative h-2 w-full bg-blue-200">
-            <div
-              className="h-2 bg-blue-500"
-              style={{ width: `${uploadProgress}%` }}
-            ></div>
+
+        {uploadProgress > 0 && (
+          <div className="mt-2">
+            <div className="relative h-2 w-full bg-blue-200">
+              <div
+                className="h-2 bg-blue-500"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+            <p className="mt-2 text-center text-sm">
+              Upload Progress: {uploadProgress}%
+            </p>
           </div>
-          <p className="mt-2 text-center text-sm">
-            Upload Progress: {uploadProgress}%
-          </p>
-        </div>
-      )}
-      <div className="py-2"></div>
-      <button
-        onClick={handleUploadFile}
-        className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-      >
-        Upload Audio File
-      </button>
+        )}
+
+        <div className="py-2"></div>
+        <button
+          onClick={handleUploadFile}
+          className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          Upload Audio File
+        </button>
+      </div>
     </>
   );
 };

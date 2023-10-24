@@ -11,17 +11,16 @@ import { useStore } from "~/utils/stores";
 import { MusicNote } from "@mui/icons-material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import createTheme from "@mui/material/styles/createTheme";
-import { ListSubheader, ThemeProvider } from "@mui/material";
-import { text } from "stream/consumers";
+import { ThemeProvider } from "@mui/material";
 import UserSounds from "~/app/studio/_components/user-audio-downloader";
 import SoundList from "./sound-list";
 
 export default function SelectedListItem() {
-  const [soundOptions, setSoundRef, soundRef] = useStore((state) => [
-    state.soundList,
-    state.setSoundRef,
-    state.soundRef,
-  ]);
+  // const [soundOptions, setSoundRef, soundRef] = useStore((state) => [
+  //   state.soundList,
+  //   state.setSoundRef,
+  //   state.soundRef,
+  // ]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,8 +34,8 @@ export default function SelectedListItem() {
       >
         <SoundList />
         <Divider />
-        <UserSounds pathName={"sounds"} title={"Your Sounds"} />
-        <UserSounds pathName={"records"} title={"Your Sounds Recorded"} />
+        <UserSounds pathName={"sounds"} title={"Téléchargements"} />
+        <UserSounds pathName={"records"} title={"Enregistrements"} />
       </Box>
     </ThemeProvider>
   );

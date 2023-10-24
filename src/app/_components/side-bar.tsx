@@ -2,12 +2,13 @@
 import { MdAccountCircle, MdMic, MdHome, MdPriceChange } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import SidebarLink from "./sidebar-link";
+import TopBar from "./new-top-bar";
 
 const Sidebar: React.FC = () => {
-  const isSmallScreen = useMediaQuery({ maxWidth: 450 });
+  const isSmallScreen = useMediaQuery({ maxWidth: 639 });
 
-  return (
-    <aside className="bg-secondaryColor h-screen w-1/6 overflow-y-scroll text-center  md:w-1/6 xl:w-2/12">
+  const sideBar = (
+    <aside className="h-screen w-1/6 overflow-y-scroll bg-secondaryColor text-center  md:w-1/6 xl:w-2/12">
       <div className="flex flex-col place-content-center gap-y-5">
         <div className="text-center">
           <img
@@ -66,6 +67,7 @@ const Sidebar: React.FC = () => {
       </div>
     </aside>
   );
+  return !isSmallScreen ? sideBar : <TopBar />;
 };
 
 export default Sidebar;

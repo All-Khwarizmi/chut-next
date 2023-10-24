@@ -23,19 +23,22 @@ export default function SoundList() {
       aria-label="Sounds selector list"
       sx={{
         p: 2,
+
+        alignItems: "center",
       }}
     >
       <ListSubheader
         sx={{ color: "text.primary", fontWeight: "bold", fontSize: 16 }}
-      >{`Sounds`}</ListSubheader>
+      >{`Bibliothèque`}</ListSubheader>
       {soundOptions.map((ele) => {
         return (
           <ListItemButton
+            sx={{}}
             key={crypto.randomUUID()}
             selected={ele.value === soundRef}
             onClick={(event) => setSoundRef(ele.value)}
           >
-            <ListItemIcon>
+            <ListItemIcon sx={{}}>
               <MusicNoteIcon />
             </ListItemIcon>
             <ListItemText primary={ele.label} />

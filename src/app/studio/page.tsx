@@ -6,7 +6,7 @@ import SelectedListItem from "./_components/sound-selected-list";
 
 export default function Page() {
   const uploadSound = (
-    <div className="place flex flex-col items-center gap-y-3 py-8">
+    <div className=" flex flex-col items-center gap-y-3 py-8">
       <div className="text-2xl font-bold">Upload sound</div>
       <AudioUploader />
     </div>
@@ -21,7 +21,7 @@ export default function Page() {
   );
   return (
     <>
-      <div className="h-full lg:grid lg:grid-cols-2 ">
+      <div className="flex h-full flex-col lg:grid lg:grid-cols-2 ">
         <div className=" flex flex-col place-content-start gap-y-5 p-5 pt-12">
           {uploadSound}
           <div className="border"></div>

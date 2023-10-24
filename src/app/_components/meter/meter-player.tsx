@@ -105,7 +105,6 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
                   }}
                 >
                   <SoundList />
-                 
                 </Box>
               </ThemeProvider>
             </form>
