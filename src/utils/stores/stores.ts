@@ -25,6 +25,7 @@ interface StoreState {
    */
   setSoundRef: (soundRef: string) => void;
   setSoundList: (soundList: SoundOptions) => void;
+  removeFromSoundList: (sound: SoundOptions) => void;
   setSoundListBackup: (soundList: SoundOptions) => void;
   setUserSounds: (userSound: SoundOptions) => void;
   setUserRecords: (userRecord: SoundOptions) => void;
@@ -110,6 +111,11 @@ export const useStore = create<StoreState>()(
       setSoundList: (soundList) => {
         set((state) => ({
           soundList: [...state.soundList, soundList],
+        }));
+      },
+      removeFromSoundList: (sound: SoundOptions) => {
+        set((state) => ({
+          soundList: state.soundList.filter((s) => s.value !== sound.value),
         }));
       },
       setSoundListBackup: (soundList) => {

@@ -9,7 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { SoundOptions, useStore } from "~/utils/stores/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import { IconButton, ListSubheader } from "@mui/material";
+import { IconButton, ListSubheader, ListItem } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 interface UserSoundsProps {
   pathName: string;
@@ -38,6 +38,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     deleteUserRecords,
     deleteUserSounds,
     setSoundList,
+    removeFromSoundList,
   ] = useStore((state) => [
     state.soundList,
     state.setSoundRef,
@@ -53,6 +54,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     state.deleteUserRecords,
     state.deleteUserSounds,
     state.setSoundList,
+    state.removeFromSoundList,
   ]);
   const [checkUserSoundList, setCheckUserSoundList] = useState<SoundOptions[]>(
     [],
@@ -176,6 +178,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
         deleteUserRecords(record);
       }
     }
+    // setUpdate(!update);
   };
 
   const isSoundsOrRecords = () =>
@@ -194,30 +197,34 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
       </ListSubheader>
       {isSoundsOrRecords().map((ele) => {
         return (
-          <ListItemButton
-            key={crypto.randomUUID()}
-            selected={ele.label === soundRef}
-            onClick={(_) => {
-              //
-              if (soundRef !== ele.value) {
-                setSoundRef(ele.value);
-                if (!soundOptions.some((e) => e.value === ele.value)) {
-                  setSoundList(ele);
+          <ListItem key={crypto.randomUUID()}>
+            <ListItemButton
+              selected={ele.label === soundRef}
+              onClick={(_) => {
+                //
+                if (soundRef !== ele.value) {
+                  setSoundRef(ele.value);
+                  if (!soundOptions.some((e) => e.value === ele.value)) {
+                    setSoundList(ele);
+                  }
                 }
-              }
-            }}
-          >
-            <ListItemIcon>
-              <MusicNoteIcon />
-            </ListItemIcon>
-            <ListItemText primary={ele.label} />
+              }}
+            >
+              <ListItemIcon>
+                <MusicNoteIcon />
+              </ListItemIcon>
+              <ListItemText primary={ele.label} />
+            </ListItemButton>
             <IconButton
-              onClick={() => handleDeleteUserSound(pathName, ele.label, update)}
+              onClick={() => {
+                //   removeFromSoundList(ele);
+                handleDeleteUserSound(pathName, ele.label, update);
+              }}
               aria-label="comment"
             >
               <DeleteIcon sx={{ color: "red" }} />
             </IconButton>
-          </ListItemButton>
+          </ListItem>
         );
       })}
     </List>
