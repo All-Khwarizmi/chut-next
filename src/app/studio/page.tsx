@@ -22,9 +22,11 @@ export default function Page() {
   return (
     <>
       <div className="flex h-full flex-col lg:grid lg:grid-cols-2 ">
-        <div className=" flex flex-col place-content-start gap-y-5 p-5 pt-12">
+        <div className=" flex flex-col place-content-start gap-y-5 p-8 pt-12 md:px-20">
           {uploadSound}
-          <div className="border"></div>
+
+          <div className="border "></div>
+
           {recordSound}
         </div>
         <div className="flex place-content-center p-5 pt-12 text-center">

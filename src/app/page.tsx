@@ -37,13 +37,7 @@ export default function Home() {
     fetchSoundList();
   }, [soundList]);
   // JSX
-  const leftSide = (
-    <div className="h-full p-4  lg:flex-1 ">
-      <div className="flex h-full flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
-        <MeterPlayer />
-      </div>
-    </div>
-  );
+
   const mainTitle = (title: string) => (
     <div className="px-5 text-4xl sm:text-4xl lg:text-6xl">{title}</div>
   );
@@ -60,7 +54,7 @@ export default function Home() {
       onClick={() => alert("Call to action clicked")}
       className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
     >
-      <div className="flex items-center gap-2 align-middle">
+      <div className="flex  items-center gap-2 align-middle">
         {text} {rightArrow}
       </div>
     </button>
@@ -74,6 +68,13 @@ export default function Home() {
         {text} {rightArrow}
       </div>
     </button>
+  );
+  const leftSide = (
+    <div className="h-full p-4  lg:flex-1 ">
+      <div className="flex h-full flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+        <MeterPlayer />
+      </div>
+    </div>
   );
   const rightSide = (
     <div className=" h-full p-4 text-white lg:flex-1">

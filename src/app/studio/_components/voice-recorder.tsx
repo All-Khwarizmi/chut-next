@@ -77,7 +77,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
   return (
     <div
       id="user-records"
-      className="bg-mediumGray place flex flex-col place-items-center gap-y-3 rounded-lg p-4"
+      className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
     >
       <TextField
         InputLabelProps={{ style: { color: "white" } }}

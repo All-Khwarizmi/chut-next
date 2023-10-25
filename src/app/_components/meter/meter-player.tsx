@@ -13,7 +13,7 @@ import { RequestPermission } from "./meter";
 import { SoundOptions, useStore } from "~/utils/stores";
 import { SoundSelection } from "./sound-selection";
 import SoundList from "~/app/studio/_components/sound-list";
-import { theme } from "~/app/studio/_components/sound-selected-list";
+import { theme } from "~/shared/theme";
 
 interface MeterPlayerProps {}
 
@@ -55,7 +55,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
   const startAndStopRecordingButton = isRecording ? (
     <div>
       <button
-        className="rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-72 rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(false)}
       >
         Stop
@@ -64,7 +64,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
   ) : (
     <div>
       <button
-        className="rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-72 rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(true)}
       >
         Start Recording
@@ -73,7 +73,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
   );
 
   const soundSwitch = (
-    <FormGroup sx={{ placeItems: "center", paddingBottom: 3 }}>
+    <FormGroup sx={{ placeItems: "center", paddingBottom: 3, fontSize: 20 }}>
       <FormControlLabel
         control={
           <Switch onChange={() => setIsSound(!isSound)} checked={isSound} />
@@ -98,8 +98,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
               <ThemeProvider theme={theme}>
                 <Box
                   sx={{
-                    width: "100%",
-                    maxWidth: 360,
+                    width: 300,
                     bgcolor: "background.paper",
                     borderRadius: 5,
                   }}
