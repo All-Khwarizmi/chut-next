@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
                   <MdHome className=" text-2xl" />
                 </div>
               ) : (
-                "Home"
+                "Accueil"
               )}
             </SidebarLink>
           </li>
@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
                   <MdAccountCircle className="text-2xl" />
                 </div>
               ) : (
-                "Account"
+                "Compte"
               )}
             </SidebarLink>
           </li>

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { RequestPermission } from "./meter";
-import { SoundOptions, useStore } from "~/utils/stores";
+import { SoundOptions, useStore } from "~/utils/stores/stores";
 import { SoundSelection } from "./sound-selection";
 import SoundList from "~/app/studio/_components/sound-list";
 import { theme } from "~/shared/theme";

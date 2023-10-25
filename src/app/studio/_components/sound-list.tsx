@@ -4,7 +4,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
-import { useStore } from "~/utils/stores";
+import { useStore } from "~/utils/stores/stores";
 import { MusicNote } from "@mui/icons-material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { ListSubheader, ThemeProvider } from "@mui/material";

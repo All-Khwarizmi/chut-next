@@ -3,22 +3,60 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
-import { useStore } from "~/utils/stores";
+import { checkPrumiumUsage } from "~/utils/stores/store-helpers";
+import { useStore } from "~/utils/stores/stores";
+import { isAudioFileValid } from "../helpers/audio-helpers";
 
 //
 const AudioUploader: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState<number>(0); // Added progress state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [inputKey, setInputKey] = useState<string>(crypto.randomUUID());
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
-  const [update, setUpdate, setUserSounds] = useStore((state) => [
-    state.update,
-    state.setUpdate,
-    state.setUserSounds,
-  ]);
-  const handleUploadFile = () => {
+  const [update, setUpdate, setUserSounds, userSounds, userRecords] = useStore(
+    (state) => [
+      state.update,
+      state.setUpdate,
+      state.setUserSounds,
+      state.userSounds,
+      state.userRecords,
+    ],
+  );
+  /**
+   * @description Uploads a file to firebase storage and adds it to the user's collection of sounds
+   * @returns
+   */
+  const handleUploadFile = async () => {
+    // Check if user has selected a file
     if (selectedFile) {
+      // Check if user has exceeded the prumim usage limit
+      if (checkPrumiumUsage(userSounds, userRecords)) {
+        alert("Vous avez déjà atteint le nombre de fichiers autorisés");
+        setSelectedFile(null);
+        setInputKey(crypto.randomUUID());
+        return;
+      }
+
+      let isFileValid: boolean = false;
+      try {
+        isFileValid = await isAudioFileValid(selectedFile);
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
+        );
+        setSelectedFile(null);
+      }
+
+      if (!isFileValid) {
+        alert(
+          "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
+        );
+        setSelectedFile(null);
+        return;
+      }
       const storageRef = ref(
         storageBucket,
         `customers/${user?.uid}/sounds/${selectedFile!.name}`,
@@ -53,15 +91,16 @@ const AudioUploader: React.FC = () => {
         () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
-            // You can use downloadURL here if needed
             setUserSounds({ label: selectedFile.name, value: downloadURL });
             setUpdate(!update);
             setSelectedFile(null); // Reset the input field
             setUploadProgress(0); // Reset the progress
+            alert("Fichier téléchargé avec succès");
           });
         },
       );
+    } else {
+      alert("Selectionnez un fichier audio");
     }
   };
   // Handle drag events on the dropzone element (the whole div)
@@ -83,6 +122,7 @@ const AudioUploader: React.FC = () => {
         console.log(`Dropped: ${JSON.stringify(file.name)}`);
 
         setSelectedFile(file);
+        setInputKey(crypto.randomUUID());
       } else {
         // Display an error message or alert if it's not an audio file
         alert("Please drop an audio file (e.g., MP3 or WAV).");
@@ -94,8 +134,11 @@ const AudioUploader: React.FC = () => {
     e.target.files;
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
-      console.log(`Input: ${JSON.stringify(file.name)}`);
-
+      if (file.name === selectedFile?.name) {
+        alert("Vous avez déjà sélectionné ce fichier");
+        setInputKey(crypto.randomUUID());
+        return;
+      }
       setSelectedFile(file);
     }
   };
@@ -111,6 +154,7 @@ const AudioUploader: React.FC = () => {
           type="file"
           accept="audio/*"
           className=""
+          key={inputKey}
           onChange={handleFileInput}
         />
 

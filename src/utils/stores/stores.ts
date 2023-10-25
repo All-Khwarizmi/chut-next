@@ -1,7 +1,7 @@
 "use client";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand";
-import { storageBucket } from "./firebase";
+import { storageBucket } from "../firebase";
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 
 interface StoreState {

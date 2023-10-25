@@ -1,21 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Auth, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { initFirebase } from "../../utils/firebase";
-import { getCheckoutUrl, getPortalUrl } from "~/utils/stripe/stripePayment";
 import { PremiumPanel } from "./premium-panel";
 import { StandardPanel } from "./standard-panel";
 import { getPremiumStatus } from "./get-premium-status";
-import {
-  deleteUser,
-  manageSubscription,
-  signOut,
-  // signOut,
-  upgradeToPremium,
-} from "./account-helpers";
+import { deleteUser, signOut, upgradeToPremium } from "./account-helpers";
 import { useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { FirebaseApp } from "firebase/app";
 
 export default function AccountPage() {
   const app = initFirebase();
@@ -24,7 +15,6 @@ export default function AccountPage() {
   const userName = auth.currentUser?.displayName;
   const email = auth.currentUser?.email;
   const [isPremium, setIsPremium] = useState(false);
-  const [portalUrl, setPortalUrl] = useState("");
   const router = useRouter();
   const user = auth.currentUser;
 
@@ -39,15 +29,6 @@ export default function AccountPage() {
     checkPremium().catch((e) => alert(e));
   }, [app, auth.currentUser?.uid]);
 
-  // useEffect(() => {
-  //   const getPortalUrlOnFirstLoad = async () => {
-  //     const portalUrl = await getPortalUrl(app);
-  //     setPortalUrl(portalUrl);
-  //   };
-
-  //   getPortalUrlOnFirstLoad().catch((e) => alert(e));
-  // }, [app]);
-
   const userDataBloc = (
     <>
       <div className="place-content center flex flex-col gap-y-5 ">
@@ -59,7 +40,9 @@ export default function AccountPage() {
           />
         </div>
         <div className="text-center">
-          <div className="mb-1 text-slate-500">Signed in as {userName}</div>
+          <div className="mb-1 text-slate-500">
+            Connecté en tant que {userName}
+          </div>
           <div className="text-xl text-slate-300">{email}</div>
         </div>
         <div className="flex place-content-center text-center">

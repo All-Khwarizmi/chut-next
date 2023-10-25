@@ -10,7 +10,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { TextField } from "@mui/material";
-import { useStore } from "~/utils/stores";
+import { useStore } from "~/utils/stores/stores";
 
 interface VoiceRecorderProps {
   // onSave: (audioBlob: Blob) => void;

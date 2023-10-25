@@ -9,7 +9,7 @@ import { rightArrow } from "~/shared/helpers-elements";
 import { signIn } from "~/shared/helpers-fns";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
-import { fetchSoundList, useStore } from "~/utils/stores";
+import { fetchSoundList, useStore } from "~/utils/stores/stores";
 
 export default function Home() {
   const app = initFirebase();

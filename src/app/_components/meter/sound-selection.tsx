@@ -1,4 +1,4 @@
-import { useStore } from "~/utils/stores";
+import { useStore } from "~/utils/stores/stores";
 
 interface SoundSelectionProps {
   onSoundChange: (sound: string) => void;

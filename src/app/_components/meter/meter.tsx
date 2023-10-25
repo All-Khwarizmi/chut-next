@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useStore } from "~/utils/stores";
+import { useStore } from "~/utils/stores/stores";
 import * as Tone from "tone";
 import { getDecibel } from "~/utils/tone-helpers";
 interface RecordProps {
