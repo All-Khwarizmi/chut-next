@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Auth, getAuth } from "firebase/auth";
 import { initFirebase } from "../../utils/firebase";
-import { getPortalUrl } from "~/utils/stripe/stripePayment";
+import { getCheckoutUrl, getPortalUrl } from "~/utils/stripe/stripePayment";
 import { PremiumPanel } from "./premium-panel";
 import { StandardPanel } from "./standard-panel";
 import { getPremiumStatus } from "./get-premium-status";
@@ -15,6 +15,7 @@ import {
 } from "./account-helpers";
 import { useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { FirebaseApp } from "firebase/app";
 
 export default function AccountPage() {
   const app = initFirebase();
@@ -35,7 +36,7 @@ export default function AccountPage() {
 
       setIsPremium(newPremiumStatus);
     };
-    checkPremium().catch((e) => console.log(e));
+    checkPremium().catch((e) => alert(e));
   }, [app, auth.currentUser?.uid]);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function AccountPage() {
       setPortalUrl(portalUrl);
     };
 
-    getPortalUrlOnFirstLoad().catch((e) => console.log(e));
+    getPortalUrlOnFirstLoad().catch((e) => alert(e));
   }, [app]);
 
   const userDataBloc = (
@@ -79,13 +80,14 @@ export default function AccountPage() {
       </button>
     </div>
   );
+
   const suscriptionButton = (
     <div className="text-center ">
       <button
         onClick={
           isPremium
-            ? () => manageSubscription(portalUrl)
-            : () => upgradeToPremium(app)
+            ? () => manageSubscription(portalUrl, router)
+            : () => upgradeToPremium(app, router)
         }
         className="w-72 rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
       >

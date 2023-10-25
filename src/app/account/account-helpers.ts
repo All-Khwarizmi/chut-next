@@ -28,17 +28,23 @@ export const deleteUser = (user: User) => {
   }
 };
 
-export const manageSubscription = (portalUrl: string) => {
-  console.log(`manage subscription...`);
-  console.log(`manage subscription ${portalUrl}`);
-  useRouter().push(portalUrl);
+export const manageSubscription = (
+  portalUrl: string,
+  router: AppRouterInstance,
+) => {
+  // console.log(`manage subscription...`);
+  // console.log(`manage subscription ${portalUrl}`);
+  router.push(portalUrl);
 };
 
-export const upgradeToPremium = async (app: FirebaseApp) => {
-  const myPriceId = "price_1O3KUlHIBlFqgcGsEJHDPxj6";
+export const upgradeToPremium = async (
+  app: FirebaseApp,
+  router: AppRouterInstance,
+) => {
+  const myPriceId = "prctbl_1O3KgOHIBlFqgcGstroPLvP4";
   const checkoutUrl = await getCheckoutUrl(app, myPriceId);
-  useRouter().push(checkoutUrl);
-  console.log("upgrade to premium");
+  router.push(checkoutUrl);
+  // console.log("upgrade to premium");
 };
 export const signOut = (router: AppRouterInstance, auth: Auth) => {
   auth.signOut().catch(() => console.log("Error signing out"));
