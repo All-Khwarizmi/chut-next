@@ -105,7 +105,7 @@ const AudioUploader: React.FC = () => {
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 p-4 text-center  lg:py-8"
+        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 p-2 text-center md:p-4  lg:py-8"
       >
         <input
           type="file"
