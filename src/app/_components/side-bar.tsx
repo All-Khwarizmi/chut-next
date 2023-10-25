@@ -8,7 +8,7 @@ const Sidebar: React.FC = () => {
   const isSmallScreen = useMediaQuery({ maxWidth: 639 });
 
   const sideBar = (
-    <aside className="h-screen w-1/6 overflow-y-scroll bg-secondaryColor text-center  md:w-1/6 xl:w-2/12">
+    <aside className="sticky h-screen w-1/6 overflow-hidden bg-secondaryColor text-center  md:w-1/6 xl:w-2/12">
       <div className="flex flex-col place-content-center gap-y-5">
         <div className="text-center">
           <img
