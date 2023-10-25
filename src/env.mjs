@@ -20,6 +20,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
     NEXT_PUBLIC_PRICING_TABLE_ID: z.string(),
     NEXT_PUBLIC_PRICING_TABLE_KEY: z.string(),
+    NEXT_PUBLIC_PRICE: z.string(),
   },
 
   /**
@@ -32,6 +33,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     NEXT_PUBLIC_PRICING_TABLE_ID: process.env.NEXT_PUBLIC_PRICING_TABLE_ID,
     NEXT_PUBLIC_PRICING_TABLE_KEY: process.env.NEXT_PUBLIC_PRICING_TABLE_KEY,
+    NEXT_PUBLIC_PRICE: process.env.NEXT_PUBLIC_PRICE,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

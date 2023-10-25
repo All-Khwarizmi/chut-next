@@ -2,9 +2,10 @@ import { Auth, User } from "@firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
+import { env } from "~/env.mjs";
 import { getCheckoutUrl } from "~/utils/stripe/stripePayment";
 
-export const deleteUser = (user: User) => {
+export const deleteUser = (user: User, router: AppRouterInstance) => {
   const isUserSure = window.confirm("Are you sure? \nAny data will be lost");
   if (isUserSure) {
     const confirmationMsg = "Delete my account";
@@ -16,7 +17,7 @@ export const deleteUser = (user: User) => {
         .delete()
         .then(() => {
           alert("Your account has been deleted");
-          useRouter().push("/");
+          router.push("/");
         })
         .catch((e) =>
           alert(`Error happened trying to delete user:
@@ -41,12 +42,12 @@ export const upgradeToPremium = async (
   app: FirebaseApp,
   router: AppRouterInstance,
 ) => {
-  const myPriceId = "price_1O5B7HHIBlFqgcGsQxmQifoQ";
+  const myPriceId = env.NEXT_PUBLIC_PRICE;
   const checkoutUrl = await getCheckoutUrl(app, myPriceId);
   router.push(checkoutUrl);
   // console.log("upgrade to premium");
 };
 export const signOut = (router: AppRouterInstance, auth: Auth) => {
-  auth.signOut().catch(() => console.log("Error signing out"));
+  auth.signOut().catch((e) => alert(e));
   router.push("/");
 };

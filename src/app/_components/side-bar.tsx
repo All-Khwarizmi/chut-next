@@ -41,17 +41,7 @@ const Sidebar: React.FC = () => {
               )}
             </SidebarLink>
           </li>
-          <li>
-            <SidebarLink href="/pricing">
-              {isSmallScreen ? (
-                <div className="flex place-content-center">
-                  <MdPriceChange className="text-2xl" />
-                </div>
-              ) : (
-                "Pricing"
-              )}
-            </SidebarLink>
-          </li>
+
           <li>
             <SidebarLink href="/account">
               {isSmallScreen ? (

@@ -39,14 +39,14 @@ export default function AccountPage() {
     checkPremium().catch((e) => alert(e));
   }, [app, auth.currentUser?.uid]);
 
-  useEffect(() => {
-    const getPortalUrlOnFirstLoad = async () => {
-      const portalUrl = await getPortalUrl(app);
-      setPortalUrl(portalUrl);
-    };
+  // useEffect(() => {
+  //   const getPortalUrlOnFirstLoad = async () => {
+  //     const portalUrl = await getPortalUrl(app);
+  //     setPortalUrl(portalUrl);
+  //   };
 
-    getPortalUrlOnFirstLoad().catch((e) => alert(e));
-  }, [app]);
+  //   getPortalUrlOnFirstLoad().catch((e) => alert(e));
+  // }, [app]);
 
   const userDataBloc = (
     <>
@@ -82,17 +82,13 @@ export default function AccountPage() {
   );
 
   const suscriptionButton = (
-    <div className="text-center ">
+    <div className={`text-center ${isPremium ? "hidden" : ""}`}>
       <button
-        onClick={
-          isPremium
-            ? () => manageSubscription(portalUrl, router)
-            : () => upgradeToPremium(app, router)
-        }
+        onClick={() => upgradeToPremium(app, router)}
         className="w-72 rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
       >
         <div className="flex items-center justify-center gap-2 align-middle">
-          {isPremium ? "Manage Subscription" : "Upgrade To Premium"}
+          Upgrade To Premium
         </div>
       </button>
     </div>
@@ -100,16 +96,13 @@ export default function AccountPage() {
 
   const dangerZone = (
     <div className="flex flex-1 place-content-center pt-12">
-      <div className="rounded-lg bg-slate-500 p-12">
-        <div className="flex flex-col place-content-center gap-6 text-center">
-          <p className="text-2xl">Danger zone</p>
-          <button
-            onClick={() => deleteUser(user!)}
-            className="rounded-lg  bg-red-600 p-4 px-6 text-lg shadow-lg hover:bg-red-700"
-          >
-            Delete Acccount
-          </button>
-        </div>
+      <div className="flex flex-col place-content-center gap-6 text-center">
+        <button
+          onClick={() => deleteUser(user!, router)}
+          className="w-72 rounded-lg bg-red-600 p-4 px-6 text-lg shadow-lg hover:bg-red-700"
+        >
+          Delete Acccount
+        </button>
       </div>
     </div>
   );

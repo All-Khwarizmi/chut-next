@@ -28,9 +28,7 @@ export default function ButtonAppBar() {
           <Button onClick={() => router.push("/studio")} color="inherit">
             Studio
           </Button>
-          <Button onClick={() => router.push("/pricing")} color="inherit">
-            Prix
-          </Button>
+
           <Button onClick={() => router.push("/account")} color="inherit">
             Compte
           </Button>
