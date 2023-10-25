@@ -41,7 +41,7 @@ export const upgradeToPremium = async (
   app: FirebaseApp,
   router: AppRouterInstance,
 ) => {
-  const myPriceId = "prctbl_1O3KgOHIBlFqgcGstroPLvP4";
+  const myPriceId = "price_1O5B7HHIBlFqgcGsQxmQifoQ";
   const checkoutUrl = await getCheckoutUrl(app, myPriceId);
   router.push(checkoutUrl);
   // console.log("upgrade to premium");
