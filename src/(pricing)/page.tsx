@@ -1,9 +1,9 @@
 "use client";
 import * as React from "react";
-import { initFirebase } from "../../utils/firebase";
+import { initFirebase } from "../utils/firebase";
 import { getAuth } from "@firebase/auth";
-import { getPremiumStatus } from "../account/get-premium-status";
-import Layout from "../_components/layout-component";
+import { getPremiumStatus } from "../app/account/get-premium-status";
+import Layout from "../app/_components/layout-component";
 import { env } from "~/env.mjs";
 
 function PricingPage() {
