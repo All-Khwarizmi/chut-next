@@ -1,43 +1,41 @@
-import Link from "next/link";
-import { getCheckoutUrl } from "~/utils/stripe/stripePayment";
-import { initFirebase } from "../../utils/firebase";
+"use client";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
+import { theme } from "~/shared/theme";
 
-interface TopBarProps {
-  isUserLoggedIn: boolean;
-  isPremiumUser: boolean;
-}
-
-const TopBar: React.FC<TopBarProps> = ({ isUserLoggedIn, isPremiumUser }) => {
-  const app = initFirebase();
+export default function ButtonAppBar() {
   const router = useRouter();
-  const upgradeToPremium = async () => {
-    const myPriceId = "price_1O3KUlHIBlFqgcGsEJHDPxj6";
-    const checkoutUrl = await getCheckoutUrl(app, myPriceId);
-    router.push(checkoutUrl);
-    console.log("upgrade to premium");
-  };
   return (
-    <header className="sticky left-64 bg-blue-500 p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          {isUserLoggedIn ? (
-            isPremiumUser ? (
-              <button className="text-white">Account</button>
-            ) : (
-              <button className="rounded-full bg-yellow-500 px-3 py-1 text-white">
-                Become Premium
-              </button>
-            )
-          ) : (
-            <Link href="/signin">
-              <p className="text-white">Sign In</p>
-            </Link>
-          )}
-        </div>
-      </div>
-    </header>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar sx={{ bgcolor: theme.palette.secondary.main }} position="fixed">
+        <Toolbar>
+          <Box
+            component="img"
+            sx={{
+              height: 58,
+              p: 1,
+            }}
+            alt="Chut logo"
+            src={"/chut-carre.png"}
+          />
+          <Button onClick={() => router.push("/")} color="inherit">
+            Accueil
+          </Button>
+          <Button onClick={() => router.push("/studio")} color="inherit">
+            Studio
+          </Button>
+          <Button onClick={() => router.push("/pricing")} color="inherit">
+            Prix
+          </Button>
+          <Button onClick={() => router.push("/account")} color="inherit">
+            Compte
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
-};
-
-export default TopBar;
+}

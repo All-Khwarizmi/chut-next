@@ -2,7 +2,7 @@
 import { MdAccountCircle, MdMic, MdHome, MdPriceChange } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import SidebarLink from "./sidebar-link";
-import TopBar from "./new-top-bar";
+import TopBar from "./top-bar";
 
 const Sidebar: React.FC = () => {
   const isSmallScreen = useMediaQuery({ maxWidth: 639 });

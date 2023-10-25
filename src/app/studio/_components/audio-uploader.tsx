@@ -1,15 +1,11 @@
 import { getAuth } from "@firebase/auth";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
 import { useStore } from "~/utils/stores";
 
+//
 const AudioUploader: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState<number>(0); // Added progress state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -68,7 +64,7 @@ const AudioUploader: React.FC = () => {
       );
     }
   };
-
+  // Handle drag events on the dropzone element (the whole div)
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
@@ -109,7 +105,7 @@ const AudioUploader: React.FC = () => {
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 text-center   lg:py-8"
+        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 p-4 text-center  lg:py-8"
       >
         <input
           type="file"
