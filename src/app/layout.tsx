@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`bg-primaryColor font-sans ${inter.variable}`}>
         {" "}
         <AuthRouter>
           <Layout>
