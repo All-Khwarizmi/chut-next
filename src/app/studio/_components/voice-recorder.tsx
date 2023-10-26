@@ -12,7 +12,8 @@ import { TextField } from "@mui/material";
 import { useStore } from "~/utils/stores/stores";
 import { useAudioRecorder, AudioRecorder } from "react-audio-voice-recorder";
 import { HiPlayPause } from "react-icons/hi2";
-import { MdStopCircle } from "react-icons/md";
+import { MdStopCircle, MdSave } from "react-icons/md";
+import { RxReset } from "react-icons/rx";
 import { AudioVisualizer, LiveAudioVisualizer } from "react-audio-visualize";
 
 interface VoiceRecorderProps {
@@ -23,6 +24,8 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
   const [inputField, setInputField] = useState<string>("");
   const [isRecordingOld, setIsRecording] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [saveBlob, setSaveBlob] = useState<boolean>(false);
+  const [recordingDuration, setRecordingDuration] = useState<number | null>();
   const [mediaRecorderLocal, setMediaRecorderLocal] =
     useState<MediaRecorder | null>(null);
   const app = initFirebase();
@@ -48,14 +51,22 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
   } = useAudioRecorder();
   const recorderControls = useAudioRecorder();
   useEffect(() => {
-    console.log("Is recording: ", isRecording);
-    console.log("Is paused: ", isPaused);
     console.log("recoding time: ", recordingTime);
-    console.log("Media recorder: ", mediaRecorder);
-    if (!mediaRecorderLocal && mediaRecorder) {
+    if (mediaRecorder) {
       setMediaRecorderLocal(mediaRecorder);
     }
-  }, [isRecording, isPaused, recordingTime]);
+    if (saveBlob && recordingBlob) {
+      handleUploadFile(recordingBlob);
+    }
+    setRecordingDuration(recordingTime);
+  }, [
+    isRecording,
+    isPaused,
+    recordingTime,
+    saveBlob,
+    recordingBlob,
+    mediaRecorder,
+  ]);
 
   const handleUploadFile = (blob: Blob) => {
     if (blob && inputField.length !== 0) {
@@ -96,9 +107,14 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
             setUpdate(!update);
             setUploadProgress(0); // Reset the progress
             setInputField("");
+            setSaveBlob(false);
+            setMediaRecorderLocal(null);
+            alert("Fichier téléchargé avec succès");
           });
         },
       );
+    } else {
+      alert("Veuillez donner un nom à votre enregistrement et ressayez");
     }
   };
 
@@ -144,11 +160,24 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
       )}
     </div>
   );
+  const recorderBloc = (
+    <AudioRecorder
+      onRecordingComplete={handleUploadFile}
+      audioTrackConstraints={{
+        noiseSuppression: true,
+        echoCancellation: true,
+      }}
+      downloadOnSavePress={false}
+      downloadFileExtension="webm"
+      recorderControls={recorderControls}
+      showVisualizer={true}
+    />
+  );
 
   const textInput = (
     <TextField
       InputLabelProps={{ style: { color: "white" } }}
-      inputProps={{ style: { color: "white" } }}
+      inputProps={{ style: { color: "white", width: 200 } }}
       sx={{ pt: 2, pb: 2, input: { color: "white" } }}
       required
       id="filled-required"
@@ -173,19 +202,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
       </p>
     </div>
   );
-  const recorderBloc = (
-    <AudioRecorder
-      onRecordingComplete={handleUploadFile}
-      audioTrackConstraints={{
-        noiseSuppression: true,
-        echoCancellation: true,
-      }}
-      downloadOnSavePress={false}
-      downloadFileExtension="webm"
-      recorderControls={recorderControls}
-      showVisualizer={true}
-    />
-  );
+
   const recordControls = (
     <div>
       <div className="flex flex-row gap-x-2 py-4">
@@ -193,22 +210,26 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
           onClick={() => {
             if (!isRecording) {
               startRecording();
+              setRecordingDuration(recordingTime);
             } else {
               togglePauseResume();
             }
           }}
-          className="flex grow place-content-center rounded-lg bg-green-400 p-4 text-3xl"
+          className="flex grow place-content-center rounded-lg bg-slate-800 p-3 text-3xl"
         >
-          <HiPlayPause />
+          <HiPlayPause className="text-green-400" />
         </button>
 
         <button
           onClick={() => {
             stopRecording();
+            setMediaRecorderLocal(null);
+            setInputField("");
+            setRecordingDuration(null);
           }}
-          className="flex grow place-content-center rounded-lg bg-red-500 p-4 text-3xl"
+          className="flex grow place-content-center rounded-lg bg-slate-800 p-3 text-3xl"
         >
-          <MdStopCircle />
+          <RxReset className="text-red-500" />
         </button>
       </div>
       <div className="">
@@ -217,29 +238,30 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
             console.log("Saving file", recordingBlob);
 
             if (isRecording) {
+              setSaveBlob(true);
               stopRecording();
-            }
-            if (recordingBlob) {
-              handleUploadFile(recordingBlob);
-            } else {
+            } else if (!recordingBlob) {
               alert("Vous devez enregistrer un audio avant de le télécharger");
+            } else if (recordingBlob && inputField !== "") {
+              handleUploadFile(recordingBlob);
             }
           }}
-          className="w-[230px] rounded-lg bg-blue-500 p-4"
+          className="flex w-[230px] place-content-center rounded-lg bg-slate-800 p-3"
         >
-          Save
+          <MdSave className="text-3xl text-blue-600" />
         </button>
       </div>
     </div>
   );
-  const audioVisualizer = mediaRecorderLocal && (
-    <div className="flex flex-row items-center gap-x-2">
-      <div className="text-lg  text-slate-200">
+  const audioVisualizer = (
+    <div className="flex w-52 flex-row items-center gap-x-2">
+      <div className="text-lg  text-slate-800">
         {durationFormatter(recordingTime)}
       </div>
       <LiveAudioVisualizer
-        mediaRecorder={mediaRecorderLocal}
-        width={200}
+        barColor="rgb(15, 23, 42)"
+        mediaRecorder={mediaRecorderLocal!}
+        width={170}
         height={30}
       />
     </div>
@@ -250,7 +272,9 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
       className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
     >
       {textInput}
-      {audioVisualizer}
+      {mediaRecorderLocal || (recordingBlob && recordingDuration)
+        ? audioVisualizer
+        : null}
       {recordControls}
       {uploadProgression}
     </div>
@@ -264,7 +288,7 @@ export default VoiceRecorder;
 export const durationFormatter = (duration: number) => {
   const minutes = Math.floor(duration / 60);
   const seconds = duration % 60;
-  return `${minutes.toFixed(0).padStart(2, "0")}:${seconds
+  return `${minutes.toFixed(0).padStart(1, "0")}:${seconds
     .toFixed(0)
     .padStart(2, "0")}`;
 };
