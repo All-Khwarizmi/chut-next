@@ -50,19 +50,17 @@ const MeterPlayer = () => {
 
   const slider = (
     <ThemeProvider theme={theme}>
-      <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+      <Stack spacing={2} direction="row" sx={{}} alignItems="center">
         <Slider
           aria-label="Threshold"
-          sx={{ color: theme.palette.primary.main }}
+          sx={{ color: theme.palette.primary.main, width: 350, height: 10 }}
           min={30}
           max={110}
           step={5}
-          size="medium"
           marks={marks}
           valueLabelDisplay={"auto"}
           value={threshold}
           onChange={(_, val) => {
-            console.log(`Threshold is ${val}`);
             setThreshold(Array.isArray(val) ? val[0]! : val);
           }}
         />
@@ -72,7 +70,7 @@ const MeterPlayer = () => {
   const startAndStopRecordingButton = isRecording ? (
     <div className="">
       <button
-        className="w-[370px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[350px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(false)}
       >
         Stop
@@ -81,7 +79,7 @@ const MeterPlayer = () => {
   ) : (
     <div>
       <button
-        className="w-[370px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[350px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(true)}
       >
         Start Recording
@@ -90,7 +88,7 @@ const MeterPlayer = () => {
   );
 
   const soundSwitch = (
-    <FormGroup sx={{ placeItems: "center", paddingBottom: 3, fontSize: 20 }}>
+    <FormGroup sx={{ placeItems: "center", paddingBottom: 5, fontSize: 28 }}>
       <FormControlLabel
         control={
           <Switch onChange={() => setIsSound(!isSound)} checked={isSound} />
@@ -101,30 +99,29 @@ const MeterPlayer = () => {
   );
   return (
     <>
-      <div className="flex h-full space-x-12 pt-20 text-center">
-        <div className="flex flex-col place-content-center">
+      <div className="flex h-full  pt-20 text-center">
+        <div className="flex flex-col space-y-8">
           {isRecording ? (
             <RequestPermission threshold={threshold} isSound={isSound} />
           ) : (
-            <p className="pb-8 text-9xl"> 😴</p>
+            <p className=" text-9xl"> 😴</p>
           )}
-          {slider}
-          <div className="flex place-content-center pt-8">
-            <form className="pb-6">
-              {soundSwitch}
-              <ThemeProvider theme={theme}>
-                <Box
-                  sx={{
-                    width: 370,
-                    bgcolor: "background.paper",
-                    borderRadius: 2,
-                  }}
-                >
-                  <SoundList />
-                </Box>
-              </ThemeProvider>
-            </form>
-          </div>
+          <div className="flex place-content-center pb-4">{slider}</div>
+          <form className="">
+            {soundSwitch}
+            <ThemeProvider theme={theme}>
+              <Box
+                sx={{
+                  width: 350,
+                  bgcolor: "background.paper",
+                  borderRadius: 2,
+                }}
+              >
+                <SoundList />
+              </Box>
+            </ThemeProvider>
+          </form>
+
           {startAndStopRecordingButton}
         </div>
       </div>

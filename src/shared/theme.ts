@@ -22,9 +22,7 @@ export const theme = createTheme({
   },
   components: {
     MuiListItemButton: {
-      // defaultProps: {
-      //   selected: true
-      // },
+  
       styleOverrides: {
         root: ({ ownerState, theme }) => ({
           ":hover": {
@@ -52,17 +50,6 @@ export const theme = createTheme({
           },
           borderRadius: theme.spacing(2),
         }),
-
-        // selected: ({ ownerState, theme }) => ({
-        //   backgroundColor: theme.palette.secondary.main,
-        //   color: theme.palette.primary.main,
-
-        //   ".MuiListItemIcon-root": {
-        //     color: theme.palette.primary.main
-        //   },
-
-        //   borderRadius: theme.spacing(2)
-        // })
       },
     },
   },

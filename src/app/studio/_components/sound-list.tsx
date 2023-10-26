@@ -31,12 +31,11 @@ export default function SoundList() {
       {soundOptions.map((ele) => {
         return (
           <ListItemButton
-            sx={{}}
             key={crypto.randomUUID()}
             selected={ele.value === soundRef}
-            onClick={(event) => setSoundRef(ele.value)}
+            onClick={(_) => setSoundRef(ele.value)}
           >
-            <ListItemIcon sx={{}}>
+            <ListItemIcon>
               <MusicNoteIcon />
             </ListItemIcon>
             <ListItemText primary={ele.label} />
