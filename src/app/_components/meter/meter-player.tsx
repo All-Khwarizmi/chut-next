@@ -53,7 +53,7 @@ const MeterPlayer = () => {
       <Stack spacing={2} direction="row" sx={{}} alignItems="center">
         <Slider
           aria-label="Threshold"
-          sx={{ color: theme.palette.primary.main, width: 350, height: 10 }}
+          sx={{ color: theme.palette.primary.main, width: 340, height: 10 }}
           min={30}
           max={110}
           step={5}
@@ -70,7 +70,7 @@ const MeterPlayer = () => {
   const startAndStopRecordingButton = isRecording ? (
     <div className="">
       <button
-        className="w-[350px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[340px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(false)}
       >
         Stop
@@ -79,7 +79,7 @@ const MeterPlayer = () => {
   ) : (
     <div>
       <button
-        className="w-[350px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[340px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(true)}
       >
         Start Recording
@@ -107,12 +107,12 @@ const MeterPlayer = () => {
             <p className=" text-9xl"> 😴</p>
           )}
           <div className="flex place-content-center pb-4">{slider}</div>
-          <form className="">
+          <form className="flex flex-col place-content-center">
             {soundSwitch}
             <ThemeProvider theme={theme}>
               <Box
                 sx={{
-                  width: 350,
+                  width: 340,
                   bgcolor: "background.paper",
                   borderRadius: 2,
                 }}
