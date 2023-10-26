@@ -152,29 +152,31 @@ const VoiceRecorder: React.FC = () => {
     setRecordingDuration(null);
   };
   const textInput = (
-    <TextField
-      InputLabelProps={{ style: { color: "white" } }}
-      autoFocus={true}
-      inputProps={{
-        style: {
-          color: "white",
-          width: 200,
-          background: theme.palette.background.paper,
-        },
-      }}
-      sx={{ pt: 2, pb: 2, input: { color: "white" } }}
-      required
-      id="filled-required"
-      label="Name"
-      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputField(event.target.value);
-      }}
-      value={inputField}
-      variant="outlined"
-    />
+    <div className="pt-4">
+      <TextField
+        InputLabelProps={{ style: { color: "white" } }}
+        autoFocus={true}
+        inputProps={{
+          style: {
+            color: "white",
+            width: 200,
+            background: theme.palette.background.paper,
+          },
+        }}
+        sx={{ pt: 2, pb: 2, input: { color: "white" } }}
+        required
+        id="filled-required"
+        label="Name"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setInputField(event.target.value);
+        }}
+        value={inputField}
+        variant="outlined"
+      />
+    </div>
   );
   const uploadProgression = uploadProgress !== 0 && (
-    <div className="mt-2">
+    <div className="pb-5 pt-2">
       <div className="relative h-2 w-full bg-blue-200">
         <div
           className="h-2 bg-blue-500"
@@ -188,7 +190,7 @@ const VoiceRecorder: React.FC = () => {
   );
 
   const recordControls = (
-    <div>
+    <div className="pb-5">
       <div className="flex flex-row gap-x-2 py-4">
         <button
           onClick={() => {

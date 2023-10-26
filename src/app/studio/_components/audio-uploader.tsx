@@ -172,7 +172,7 @@ const AudioUploader: React.FC = () => {
           />
 
           {selectedFile && (
-            <p className="mt-4">Selected File: {selectedFile.name}</p>
+            <p className="mt-4">Fichier selectionné: {selectedFile.name}</p>
           )}
 
           {uploadProgress > 0 && (
@@ -184,7 +184,7 @@ const AudioUploader: React.FC = () => {
                 ></div>
               </div>
               <p className="mt-2 text-center text-sm">
-                Upload Progress: {uploadProgress}%
+               Progression: {uploadProgress}%
               </p>
             </div>
           )}
@@ -194,7 +194,7 @@ const AudioUploader: React.FC = () => {
             onClick={handleUploadFile}
             className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
           >
-            Upload Audio File
+            Télécharger Fichier Audio
           </button>
         </div>
       </div>

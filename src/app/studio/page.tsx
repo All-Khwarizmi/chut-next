@@ -6,14 +6,14 @@ import SelectedListItem from "./_components/sound-selected-list";
 export default function Page() {
   const uploadSound = (
     <div className=" flex flex-col items-center gap-y-3 p-4 py-8">
-      <div className="text-2xl font-bold">Upload sound</div>
+      <div className="text-2xl font-bold">Télécharger Un Son</div>
       <AudioUploader />
     </div>
   );
   const recordSound = (
     <div className=" flex place-content-center items-center pt-5">
       <div className="place flex flex-col  items-center gap-y-3">
-        <div className="text-2xl font-bold ">Record sound</div>
+        <div className="text-2xl font-bold ">Enregistrer Un Son </div>
         <VoiceRecorder />
       </div>
     </div>
