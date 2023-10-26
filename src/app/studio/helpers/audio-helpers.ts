@@ -76,15 +76,3 @@ export async function isBlobValid(
   }
 }
 
-// async function getBlobDuration(blob: Blob): Promise<number> {
-//   return new Promise<number>((resolve, reject) => {
-//     const audio = new Audio(URL.createObjectURL(blob));
-//     audio.onloadedmetadata = () => {
-//       console.log("Blob duration: ", audio.duration);
-//       resolve(audio.duration);
-//     };
-//     audio.onerror = (error) => {
-//       reject(error);
-//     };
-//   });
-// }

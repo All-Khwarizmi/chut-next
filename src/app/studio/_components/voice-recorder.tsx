@@ -12,6 +12,8 @@ import { RxReset } from "react-icons/rx";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 import { theme } from "~/shared/theme";
 import { isAudioFileValid, isBlobValid } from "../helpers/audio-helpers";
+import { check } from "prettier";
+import { checkPremiumUsage } from "~/utils/stores/store-helpers";
 
 const VoiceRecorder: React.FC = () => {
   const app = initFirebase();
@@ -23,10 +25,20 @@ const VoiceRecorder: React.FC = () => {
   const [recordingDuration, setRecordingDuration] = useState<number | null>();
   const [mediaRecorderLocal, setMediaRecorderLocal] =
     useState<MediaRecorder | null>(null);
-  const [update, setUpdate, setUserRecords] = useStore((state) => [
+  const [
+    update,
+    setUpdate,
+    setUserRecords,
+    userSounds,
+    userRecords,
+    checkSoundName,
+  ] = useStore((state) => [
     state.update,
     state.setUpdate,
     state.setUserRecords,
+    state.userSounds,
+    state.userRecords,
+    state.checkSoundName,
   ]);
 
   const {
@@ -46,7 +58,6 @@ const VoiceRecorder: React.FC = () => {
     if (saveBlob && recordingBlob) {
       handleUploadFile(recordingBlob);
     }
-    // setRecordingDuration(recordingTime);
   }, [
     isRecording,
     isPaused,
@@ -58,6 +69,17 @@ const VoiceRecorder: React.FC = () => {
 
   const handleUploadFile = async (blob: Blob) => {
     if (blob && inputField.length !== 0) {
+      if (checkPremiumUsage(userSounds, userRecords)) {
+        alert("Vous avez déjà atteint le nombre de fichiers autorisés");
+        return;
+      }
+      if (!checkSoundName(inputField)) {
+        alert(
+          "Le nom du fichier est déjà utilisé, veuillez renommer votre fichier.",
+        );
+        return;
+      }
+
       let isAudioValid = false;
       try {
         isAudioValid = await isBlobValid(blob, recordingDuration);
@@ -258,3 +280,6 @@ export const durationFormatter = (duration: number) => {
     .toFixed(0)
     .padStart(2, "0")}`;
 };
+function checkSoundName(name: any) {
+  throw new Error("Function not implemented.");
+}

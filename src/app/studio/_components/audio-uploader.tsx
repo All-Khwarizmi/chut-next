@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { initFirebase, storageBucket } from "~/utils/firebase";
-import { checkPrumiumUsage } from "~/utils/stores/store-helpers";
+import { checkPremiumUsage } from "~/utils/stores/store-helpers";
 import { useStore } from "~/utils/stores/stores";
 import { isAudioFileValid } from "../helpers/audio-helpers";
 
@@ -15,15 +15,21 @@ const AudioUploader: React.FC = () => {
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
-  const [update, setUpdate, setUserSounds, userSounds, userRecords] = useStore(
-    (state) => [
-      state.update,
-      state.setUpdate,
-      state.setUserSounds,
-      state.userSounds,
-      state.userRecords,
-    ],
-  );
+  const [
+    update,
+    setUpdate,
+    setUserSounds,
+    userSounds,
+    userRecords,
+    checkSoundName,
+  ] = useStore((state) => [
+    state.update,
+    state.setUpdate,
+    state.setUserSounds,
+    state.userSounds,
+    state.userRecords,
+    state.checkSoundName,
+  ]);
   /**
    * @description Uploads a file to firebase storage and adds it to the user's collection of sounds
    * @returns
@@ -32,13 +38,19 @@ const AudioUploader: React.FC = () => {
     // Check if user has selected a file
     if (selectedFile) {
       // Check if user has exceeded the prumim usage limit
-      if (checkPrumiumUsage(userSounds, userRecords)) {
+      if (checkPremiumUsage(userSounds, userRecords)) {
         alert("Vous avez déjà atteint le nombre de fichiers autorisés");
         setSelectedFile(null);
         setInputKey(crypto.randomUUID());
         return;
       }
-
+      if (!checkSoundName(selectedFile.name)) {
+        alert(
+          "Le nom du fichier est déjà utilisé, veuillez renommer votre fichier.",
+        );
+        setSelectedFile(null);
+        return;
+      }
       let isFileValid: boolean = false;
       try {
         isFileValid = await isAudioFileValid(selectedFile);

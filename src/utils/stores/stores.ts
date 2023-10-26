@@ -17,6 +17,7 @@ interface StoreState {
   setRecording: (isRecording: boolean) => void;
   setDecibel: (decibel: number) => void;
   setThreshold: (threshold: number) => void;
+  checkSoundName: (name: string) => boolean;
   /**
    * @description Set the soundRef to the new soundRef and update the local storage
    * @param soundRef The new soundRef to set
@@ -160,6 +161,22 @@ export const useStore = create<StoreState>()(
       },
       getSoundFromSoundList: (sound: SoundOptions) => {
         return get().soundList.find((s) => s.value === sound.value);
+      },
+      checkSoundName(name) {
+        const soundList = get().soundList;
+        const userSounds = get().userSounds;
+        const userRecords = get().userRecords;
+
+        if (soundList.some((e) => e.label === name)) {
+          return false;
+        }
+        if (userRecords.some((e) => e.label === name)) {
+          return false;
+        }
+        if (userSounds.some((e) => e.label === name)) {
+          return false;
+        }
+        return true;
       },
     }),
 

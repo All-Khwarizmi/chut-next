@@ -5,7 +5,7 @@ import { SoundOptions, useStore } from "./stores";
  *
  * @returns {boolean}
  */
-export const checkPrumiumUsage = (
+export const checkPremiumUsage = (
   userSounds: SoundOptions[],
   userRecords: SoundOptions[],
 ): boolean => {
