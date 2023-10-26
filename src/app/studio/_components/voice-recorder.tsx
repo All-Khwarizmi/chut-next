@@ -46,7 +46,7 @@ const VoiceRecorder: React.FC = () => {
     if (saveBlob && recordingBlob) {
       handleUploadFile(recordingBlob);
     }
-    setRecordingDuration(recordingTime);
+    // setRecordingDuration(recordingTime);
   }, [
     isRecording,
     isPaused,
@@ -60,7 +60,7 @@ const VoiceRecorder: React.FC = () => {
     if (blob && inputField.length !== 0) {
       let isAudioValid = false;
       try {
-        isAudioValid = await isBlobValid(blob);
+        isAudioValid = await isBlobValid(blob, recordingDuration);
       } catch (error) {
         alert("L'audio n'est pas valide, veuillez ressayer.");
       }
@@ -111,6 +111,7 @@ const VoiceRecorder: React.FC = () => {
             setInputField("");
             setSaveBlob(false);
             setMediaRecorderLocal(null);
+            setRecordingDuration(null);
             alert("Fichier téléchargé avec succès");
           });
         },
@@ -150,7 +151,7 @@ const VoiceRecorder: React.FC = () => {
       variant="outlined"
     />
   );
-  const uploadProgression = isRecording && (
+  const uploadProgression = uploadProgress !== 0 && (
     <div className="mt-2">
       <div className="relative h-2 w-full bg-blue-200">
         <div
@@ -197,6 +198,7 @@ const VoiceRecorder: React.FC = () => {
             if (inputField.length > 0) {
               if (isRecording) {
                 setSaveBlob(true);
+                setRecordingDuration(recordingTime);
                 stopRecording();
               } else if (!recordingBlob && !isRecording) {
                 alert(
@@ -237,9 +239,7 @@ const VoiceRecorder: React.FC = () => {
       className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
     >
       {textInput}
-      {(mediaRecorderLocal || saveBlob) && recordingDuration
-        ? audioVisualizer
-        : null}
+      {mediaRecorderLocal || saveBlob ? audioVisualizer : null}
 
       {recordControls}
       {uploadProgression}

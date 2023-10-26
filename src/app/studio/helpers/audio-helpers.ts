@@ -47,35 +47,44 @@ function decodeAudioData(data: ArrayBuffer): Promise<AudioBuffer> {
   });
 }
 
-
-export async function isBlobValid(blob: Blob): Promise<boolean> {
+export async function isBlobValid(
+  blob: Blob,
+  duration: number | null | undefined,
+): Promise<boolean> {
   const maxDurationInSeconds = 15; // Maximum duration in seconds
   const maxFileSizeInMegabits = 2; // Maximum file size in megabits
 
   // Check if the blob is of type 'audio' or 'video'
-  if (blob.type.startsWith("audio/") || blob.type.startsWith("video/")) {
-    const duration = await getBlobDuration(blob);
+  if (blob.type.startsWith("audio/")) {
     const fileSizeInBytes = blob.size;
     const fileSizeInMegabits = (fileSizeInBytes * 8) / 1000000; // Convert bytes to megabits
+    console.log("File size: ", fileSizeInMegabits);
+    console.log("file duration: ", duration);
 
+    if (!duration) {
+      console.log("No duration");
+      return false;
+    }
     return (
       duration <= maxDurationInSeconds &&
       fileSizeInMegabits <= maxFileSizeInMegabits
     );
   } else {
     // Handle other types of files (not audio or video)
+
     return false;
   }
 }
 
-async function getBlobDuration(blob: Blob): Promise<number> {
-  return new Promise<number>((resolve, reject) => {
-    const audio = new Audio(URL.createObjectURL(blob));
-    audio.onloadedmetadata = () => {
-      resolve(audio.duration);
-    };
-    audio.onerror = (error) => {
-      reject(error);
-    };
-  });
-}
+// async function getBlobDuration(blob: Blob): Promise<number> {
+//   return new Promise<number>((resolve, reject) => {
+//     const audio = new Audio(URL.createObjectURL(blob));
+//     audio.onloadedmetadata = () => {
+//       console.log("Blob duration: ", audio.duration);
+//       resolve(audio.duration);
+//     };
+//     audio.onerror = (error) => {
+//       reject(error);
+//     };
+//   });
+// }
