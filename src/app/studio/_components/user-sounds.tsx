@@ -122,7 +122,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
 
     fetchUserSounds();
 
-    // Update global state if local state is outdated
+    // Update global state if it is outdated (a premium sound is no longer selected)
     useStore.setState((prev) => {
       if (pathName === "sounds") {
         const filteredSoundList = prev.userSounds.filter((globalStateItem) =>

@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 
 import { ThemeProvider } from "@mui/material";
-import UserSounds from "~/app/studio/_components/user-audio-downloader";
+import UserSounds from "~/app/studio/_components/user-sounds";
 import SoundList from "./sound-list";
 import { theme } from "~/shared/theme";
 
@@ -16,7 +16,7 @@ export default function SelectedListItem() {
           width: "100%",
           maxWidth: 370,
           bgcolor: "background.paper",
-          borderRadius: 5,
+          borderRadius: 2,
         }}
       >
         <SoundList />
