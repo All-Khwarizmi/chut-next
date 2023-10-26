@@ -46,3 +46,36 @@ function decodeAudioData(data: ArrayBuffer): Promise<AudioBuffer> {
     audioContext.decodeAudioData(data, resolve, reject);
   });
 }
+
+
+export async function isBlobValid(blob: Blob): Promise<boolean> {
+  const maxDurationInSeconds = 15; // Maximum duration in seconds
+  const maxFileSizeInMegabits = 2; // Maximum file size in megabits
+
+  // Check if the blob is of type 'audio' or 'video'
+  if (blob.type.startsWith("audio/") || blob.type.startsWith("video/")) {
+    const duration = await getBlobDuration(blob);
+    const fileSizeInBytes = blob.size;
+    const fileSizeInMegabits = (fileSizeInBytes * 8) / 1000000; // Convert bytes to megabits
+
+    return (
+      duration <= maxDurationInSeconds &&
+      fileSizeInMegabits <= maxFileSizeInMegabits
+    );
+  } else {
+    // Handle other types of files (not audio or video)
+    return false;
+  }
+}
+
+async function getBlobDuration(blob: Blob): Promise<number> {
+  return new Promise<number>((resolve, reject) => {
+    const audio = new Audio(URL.createObjectURL(blob));
+    audio.onloadedmetadata = () => {
+      resolve(audio.duration);
+    };
+    audio.onerror = (error) => {
+      reject(error);
+    };
+  });
+}

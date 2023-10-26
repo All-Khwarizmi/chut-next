@@ -11,6 +11,7 @@ import { SoundOptions, useStore } from "~/utils/stores/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { IconButton, ListSubheader, ListItem } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { PlayArrow } from "@mui/icons-material";
 interface UserSoundsProps {
   pathName: string;
   title: string;
@@ -214,6 +215,14 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
               </ListItemIcon>
               <ListItemText primary={ele.label} />
             </ListItemButton>
+            <IconButton
+              onClick={() => {
+                const sampleAudio = new Audio(ele.value);
+                sampleAudio.play();
+              }}
+            >
+              <PlayArrow />
+            </IconButton>
             <IconButton
               onClick={() => {
                 //   removeFromSoundList(ele);

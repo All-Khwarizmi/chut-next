@@ -14,7 +14,7 @@ export default function SelectedListItem() {
       <Box
         sx={{
           width: "100%",
-          maxWidth: 360,
+          maxWidth: 370,
           bgcolor: "background.paper",
           borderRadius: 5,
         }}

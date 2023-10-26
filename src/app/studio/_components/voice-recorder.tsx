@@ -11,6 +11,7 @@ import { MdSave } from "react-icons/md";
 import { RxReset } from "react-icons/rx";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 import { theme } from "~/shared/theme";
+import { isAudioFileValid, isBlobValid } from "../helpers/audio-helpers";
 
 const VoiceRecorder: React.FC = () => {
   const app = initFirebase();
@@ -55,8 +56,22 @@ const VoiceRecorder: React.FC = () => {
     mediaRecorder,
   ]);
 
-  const handleUploadFile = (blob: Blob) => {
+  const handleUploadFile = async (blob: Blob) => {
     if (blob && inputField.length !== 0) {
+      let isAudioValid = false;
+      try {
+        isAudioValid = await isBlobValid(blob);
+      } catch (error) {
+        alert("L'audio n'est pas valide, veuillez ressayer.");
+      }
+
+      if (!isAudioValid) {
+        alert(
+          "L'audio n'est pas valide, il ne doit pas exceder 15 secondes ou 2mb. Veuillez enregistrer un autre audio puis ressayer.",
+        );
+        resetRecorder();
+        return;
+      }
       const storageRef = ref(
         storageBucket,
         `customers/${user?.uid}/records/${inputField}`,
@@ -106,6 +121,13 @@ const VoiceRecorder: React.FC = () => {
     }
   };
 
+  const resetRecorder = () => {
+    stopRecording();
+    setMediaRecorderLocal(null);
+    setInputField("");
+    setSaveBlob(false);
+    setRecordingDuration(null);
+  };
   const textInput = (
     <TextField
       InputLabelProps={{ style: { color: "white" } }}
@@ -160,13 +182,7 @@ const VoiceRecorder: React.FC = () => {
         </button>
 
         <button
-          onClick={() => {
-            stopRecording();
-            setMediaRecorderLocal(null);
-            setInputField("");
-            setSaveBlob(false);
-            setRecordingDuration(null);
-          }}
+          onClick={resetRecorder}
           className="flex grow place-content-center rounded-lg bg-slate-800 p-3 text-3xl"
         >
           <RxReset className="text-red-500" />
@@ -174,7 +190,7 @@ const VoiceRecorder: React.FC = () => {
       </div>
       <div className="">
         <button
-          onClick={() => {
+          onClick={async () => {
             if (!isPaused) {
               togglePauseResume();
             }
@@ -187,7 +203,7 @@ const VoiceRecorder: React.FC = () => {
                   "Vous devez enregistrer un audio avant de le télécharger",
                 );
               } else if (recordingBlob && inputField !== "") {
-                handleUploadFile(recordingBlob);
+                await handleUploadFile(recordingBlob);
               }
             } else {
               alert(

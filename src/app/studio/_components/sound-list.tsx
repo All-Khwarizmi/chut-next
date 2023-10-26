@@ -5,9 +5,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
 import { useStore } from "~/utils/stores/stores";
-import { MusicNote } from "@mui/icons-material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import { ListSubheader, ThemeProvider } from "@mui/material";
+import { ListSubheader } from "@mui/material";
 
 export default function SoundList() {
   const [soundOptions, setSoundRef, soundRef] = useStore((state) => [
