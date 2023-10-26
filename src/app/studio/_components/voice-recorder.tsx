@@ -152,7 +152,7 @@ const VoiceRecorder: React.FC = () => {
     setRecordingDuration(null);
   };
   const textInput = (
-    <div className="pt-4">
+    <div className="">
       <TextField
         InputLabelProps={{ style: { color: "white" } }}
         autoFocus={true}
