@@ -149,12 +149,12 @@ const AudioUploader: React.FC = () => {
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className=" cursor-pointer place-content-center items-center border-2 border-dashed border-gray-300 p-2 text-center md:p-4  lg:py-8"
+          className=" cursor-pointer place-content-center items-center border-2 border-dashed border-gray-300 p-4 py-4 text-center md:p-4  lg:py-8"
         >
           <input
             type="file"
             accept="audio/*"
-            className="w-72 sm:w-auto"
+            className="w-[320px]  sm:w-auto"
             key={inputKey}
             onChange={handleFileInput}
           />
