@@ -70,15 +70,15 @@ export default function Home() {
     </button>
   );
   const leftSide = (
-    <div className="h-full p-4  lg:flex-1 ">
-      <div className="flex h-full flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+    <div className="flex  grow p-4  lg:flex-1 ">
+      <div className="flex  grow flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
         <MeterPlayer />
       </div>
     </div>
   );
   const rightSide = (
-    <div className=" h-full p-4 text-white lg:flex-1">
-      <div className="flex h-full flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+    <div className=" p-4 pt-20 text-white lg:flex-1">
+      <div className="flex  flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
         {user
           ? mainTitle(
               "De la Satisfaction à la Fidélité : Les Histoires de Succès de Chut",
@@ -95,7 +95,7 @@ export default function Home() {
   );
   return (
     <>
-      <div className=" h-full lg:flex lg:flex-row ">
+      <div className="flex flex-col  lg:flex lg:flex-row ">
         {leftSide}
         {rightSide}
       </div>

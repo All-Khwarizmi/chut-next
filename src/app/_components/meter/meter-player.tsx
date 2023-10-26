@@ -84,7 +84,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
   );
   return (
     <>
-      <div className="flex h-screen space-x-12 pt-20 text-center">
+      <div className="flex space-x-12 pt-20 text-center">
         <div className="">
           {isRecording ? (
             <RequestPermission threshold={threshold} isSound={isSound} />
