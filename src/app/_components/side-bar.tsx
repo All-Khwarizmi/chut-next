@@ -9,10 +9,10 @@ const Sidebar: React.FC = () => {
 
   const sideBar = (
     <aside className=" sticky top-0 h-screen w-1/6 bg-secondaryColor text-center  md:w-1/6 xl:w-2/12">
-      <div className="flex flex-col place-content-center gap-y-5">
+      <div className="flex flex-col place-content-center gap-y-5 pt-5">
         <div className="text-center">
           <img
-            className="mx-auto block h-auto p-1 md:w-48  md:p-4 xl:w-64"
+            className="mx-auto block h-auto p-1  md:w-48  md:p-4 xl:w-64"
             src="/chut-carre.png"
             alt="Chut application logo"
           />
