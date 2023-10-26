@@ -145,44 +145,46 @@ const AudioUploader: React.FC = () => {
 
   return (
     <>
-      <div
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        className="flex flex-shrink cursor-pointer flex-col place-content-center items-center border-2 border-dashed border-gray-300 p-2 text-center md:p-4  lg:py-8"
-      >
-        <input
-          type="file"
-          accept="audio/*"
-          className=""
-          key={inputKey}
-          onChange={handleFileInput}
-        />
-
-        {selectedFile && (
-          <p className="mt-4">Selected File: {selectedFile.name}</p>
-        )}
-
-        {uploadProgress > 0 && (
-          <div className="mt-2">
-            <div className="relative h-2 w-full bg-blue-200">
-              <div
-                className="h-2 bg-blue-500"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-            </div>
-            <p className="mt-2 text-center text-sm">
-              Upload Progress: {uploadProgress}%
-            </p>
-          </div>
-        )}
-
-        <div className="py-2"></div>
-        <button
-          onClick={handleUploadFile}
-          className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+      <div className="flex h-full ">
+        <div
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          className=" cursor-pointer place-content-center items-center border-2 border-dashed border-gray-300 p-2 text-center md:p-4  lg:py-8"
         >
-          Upload Audio File
-        </button>
+          <input
+            type="file"
+            accept="audio/*"
+            className="w-72 sm:w-auto"
+            key={inputKey}
+            onChange={handleFileInput}
+          />
+
+          {selectedFile && (
+            <p className="mt-4">Selected File: {selectedFile.name}</p>
+          )}
+
+          {uploadProgress > 0 && (
+            <div className="mt-2">
+              <div className="relative h-2 w-full bg-blue-200">
+                <div
+                  className="h-2 bg-blue-500"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+              <p className="mt-2 text-center text-sm">
+                Upload Progress: {uploadProgress}%
+              </p>
+            </div>
+          )}
+
+          <div className="py-2"></div>
+          <button
+            onClick={handleUploadFile}
+            className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          >
+            Upload Audio File
+          </button>
+        </div>
       </div>
     </>
   );
