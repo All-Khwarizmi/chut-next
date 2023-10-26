@@ -10,52 +10,69 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { RequestPermission } from "./meter";
-import { SoundOptions, useStore } from "~/utils/stores/stores";
-import { SoundSelection } from "./sound-selection";
+import { useStore } from "~/utils/stores/stores";
 import SoundList from "~/app/studio/_components/sound-list";
 import { theme } from "~/shared/theme";
 
-interface MeterPlayerProps {}
-
-const MeterPlayer = ({}: MeterPlayerProps) => {
+const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
   const [threshold, setThreshold] = useStore((state) => [
     state.threshold,
     state.setThreshold,
   ]);
-  const [soundUrl, setSoundRef] = useStore((state) => [
-    state.soundRef,
-    state.setSoundRef,
+
+  const [isRecording, setRecording] = useStore((state) => [
+    state.isRecording,
+    state.setRecording,
   ]);
 
-  const isRecording = useStore((state) => state.isRecording);
-  const setRecording = useStore((state) => state.setRecording);
-  const handleSoundChange = (sound: string) => {
-    setSoundRef(sound);
-  };
+  const marks = [
+    {
+      value: 40,
+      label: "40 dB",
+    },
+
+    {
+      value: 60,
+      label: "60 dB",
+    },
+
+    {
+      value: 80,
+      label: "80 dB",
+    },
+
+    {
+      value: 100,
+      label: "100 dB",
+    },
+  ];
 
   const slider = (
-    <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-      <Slider
-        className=""
-        aria-label="Threshold"
-        sx={{ width: 300, height: 10 }}
-        min={30}
-        max={110}
-        step={5}
-        valueLabelDisplay={"auto"}
-        value={threshold}
-        onChange={(_, val) => {
-          console.log(`Threshold is ${val}`);
-          setThreshold(Array.isArray(val) ? val[0]! : val);
-        }}
-      />
-    </Stack>
+    <ThemeProvider theme={theme}>
+      <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+        <Slider
+          aria-label="Threshold"
+          sx={{ color: theme.palette.primary.main }}
+          min={30}
+          max={110}
+          step={5}
+          size="medium"
+          marks={marks}
+          valueLabelDisplay={"auto"}
+          value={threshold}
+          onChange={(_, val) => {
+            console.log(`Threshold is ${val}`);
+            setThreshold(Array.isArray(val) ? val[0]! : val);
+          }}
+        />
+      </Stack>
+    </ThemeProvider>
   );
   const startAndStopRecordingButton = isRecording ? (
-    <div>
+    <div className="">
       <button
-        className="w-72 rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[370px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(false)}
       >
         Stop
@@ -64,7 +81,7 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
   ) : (
     <div>
       <button
-        className="w-72 rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
+        className="w-[370px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => setRecording(true)}
       >
         Start Recording
@@ -78,29 +95,29 @@ const MeterPlayer = ({}: MeterPlayerProps) => {
         control={
           <Switch onChange={() => setIsSound(!isSound)} checked={isSound} />
         }
-        label="Sound"
+        label="Activer Son"
       />
     </FormGroup>
   );
   return (
     <>
-      <div className="flex space-x-12 pt-20 text-center">
-        <div className="">
+      <div className="flex h-full space-x-12 pt-20 text-center">
+        <div className="flex flex-col place-content-center">
           {isRecording ? (
             <RequestPermission threshold={threshold} isSound={isSound} />
           ) : (
-            <p className="pb-5 text-9xl"> 😴</p>
+            <p className="pb-8 text-9xl"> 😴</p>
           )}
           {slider}
-          <div className="flex place-content-center pt-5">
+          <div className="flex place-content-center pt-8">
             <form className="pb-6">
               {soundSwitch}
               <ThemeProvider theme={theme}>
                 <Box
                   sx={{
-                    width: 300,
+                    width: 370,
                     bgcolor: "background.paper",
-                    borderRadius: 5,
+                    borderRadius: 2,
                   }}
                 >
                   <SoundList />

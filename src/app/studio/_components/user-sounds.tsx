@@ -178,7 +178,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
         deleteUserRecords(record);
       }
     }
-    // setUpdate(!update);
   };
 
   const isSoundsOrRecords = () =>
@@ -225,7 +224,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
             </IconButton>
             <IconButton
               onClick={() => {
-                //   removeFromSoundList(ele);
                 handleDeleteUserSound(pathName, ele.label, update);
               }}
               aria-label="comment"

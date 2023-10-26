@@ -35,6 +35,9 @@ export const theme = createTheme({
               color: theme.palette.primary.main,
             },
           },
+          ".MuiSlider-mark": {
+            color: "#0f172as",
+          },
 
           "&.Mui-selected": {
             "&:hover": {

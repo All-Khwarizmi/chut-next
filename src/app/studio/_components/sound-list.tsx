@@ -22,7 +22,6 @@ export default function SoundList() {
       aria-label="Sounds selector list"
       sx={{
         p: 2,
-
         alignItems: "center",
       }}
     >
