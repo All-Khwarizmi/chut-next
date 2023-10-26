@@ -165,19 +165,6 @@ export const useStore = create<StoreState>()(
 
     {
       name: "chut-state",
-      onRehydrateStorage(state) {
-        console.log("hydration starts");
-        console.log(`Sound list= ${state.soundList.length}`);
-
-        // optional
-        return (state, error) => {
-          if (error) {
-            console.log("an error happened during hydration", error);
-          } else {
-            console.log("hydration finished");
-          }
-        };
-      },
     },
   ),
 );

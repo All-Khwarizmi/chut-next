@@ -32,8 +32,6 @@ const AuthRouter = (props: any) => {
     firebaseUser: User | null | undefined,
   ) => {
     if (!isLoading) {
-      console.log(`Path name: ${pathName}`);
-
       switch (pathName) {
         case "/account":
           if (!firebaseUser) {

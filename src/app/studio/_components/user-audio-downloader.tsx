@@ -71,7 +71,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
 
         try {
           const soundsList = await listAll(soundsRef);
-          console.log(`Path name = ${pathName}`);
 
           soundsList.items.map((item) => {
             getDownloadURL(item).then((url) => {

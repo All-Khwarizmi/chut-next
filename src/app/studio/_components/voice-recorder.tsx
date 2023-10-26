@@ -1,44 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { initFirebase, storageBucket } from "~/utils/firebase";
 import { getAuth } from "@firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { TextField } from "@mui/material";
 import { useStore } from "~/utils/stores/stores";
-import { useAudioRecorder, AudioRecorder } from "react-audio-voice-recorder";
+import { useAudioRecorder } from "react-audio-voice-recorder";
 import { HiPlayPause } from "react-icons/hi2";
-import { MdStopCircle, MdSave } from "react-icons/md";
+import { MdSave } from "react-icons/md";
 import { RxReset } from "react-icons/rx";
-import { AudioVisualizer, LiveAudioVisualizer } from "react-audio-visualize";
+import { LiveAudioVisualizer } from "react-audio-visualize";
+import { theme } from "~/shared/theme";
 
-interface VoiceRecorderProps {
-  // onSave: (audioBlob: Blob) => void;
-}
-
-const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
+const VoiceRecorder: React.FC = () => {
+  const app = initFirebase();
+  const auth = getAuth(app);
+  const [user] = useAuthState(auth);
   const [inputField, setInputField] = useState<string>("");
-  const [isRecordingOld, setIsRecording] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [saveBlob, setSaveBlob] = useState<boolean>(false);
   const [recordingDuration, setRecordingDuration] = useState<number | null>();
   const [mediaRecorderLocal, setMediaRecorderLocal] =
     useState<MediaRecorder | null>(null);
-  const app = initFirebase();
-  const auth = getAuth(app);
-  const [user] = useAuthState(auth);
   const [update, setUpdate, setUserRecords] = useStore((state) => [
     state.update,
     state.setUpdate,
     state.setUserRecords,
   ]);
 
-  // new
-  const visualizerRef = useRef<HTMLCanvasElement>(null);
   const {
     startRecording,
     stopRecording,
@@ -49,9 +38,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
     recordingTime,
     mediaRecorder,
   } = useAudioRecorder();
-  const recorderControls = useAudioRecorder();
   useEffect(() => {
-    console.log("recoding time: ", recordingTime);
     if (mediaRecorder) {
       setMediaRecorderLocal(mediaRecorder);
     }
@@ -114,70 +101,22 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
         },
       );
     } else {
+      setSaveBlob(false);
       alert("Veuillez donner un nom à votre enregistrement et ressayez");
     }
   };
 
-  const oldRecorder = (
-    <div
-      id="user-records"
-      className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
-    >
-      <TextField
-        InputLabelProps={{ style: { color: "white" } }}
-        inputProps={{ width: 300, style: { color: "white" } }}
-        sx={{ width: 300, pt: 2, pb: 2, input: { color: "white" } }}
-        required
-        id="filled-required"
-        label="Name"
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setInputField(event.target.value);
-        }}
-        value={inputField}
-        variant="filled"
-      />
-      <AudioRecorder
-        onRecordingComplete={handleUploadFile}
-        audioTrackConstraints={{
-          noiseSuppression: true,
-          echoCancellation: true,
-        }}
-        downloadOnSavePress={false}
-        downloadFileExtension="webm"
-      />
-      {isRecordingOld && (
-        <div className="mt-2">
-          <div className="relative h-2 w-full bg-blue-200">
-            <div
-              className="h-2 bg-blue-500"
-              style={{ width: `${uploadProgress}%` }}
-            ></div>
-          </div>
-          <p className="mt-2 text-center text-sm">
-            Upload Progress: {uploadProgress}%
-          </p>
-        </div>
-      )}
-    </div>
-  );
-  const recorderBloc = (
-    <AudioRecorder
-      onRecordingComplete={handleUploadFile}
-      audioTrackConstraints={{
-        noiseSuppression: true,
-        echoCancellation: true,
-      }}
-      downloadOnSavePress={false}
-      downloadFileExtension="webm"
-      recorderControls={recorderControls}
-      showVisualizer={true}
-    />
-  );
-
   const textInput = (
     <TextField
       InputLabelProps={{ style: { color: "white" } }}
-      inputProps={{ style: { color: "white", width: 200 } }}
+      autoFocus={true}
+      inputProps={{
+        style: {
+          color: "white",
+          width: 200,
+          background: theme.palette.background.paper,
+        },
+      }}
       sx={{ pt: 2, pb: 2, input: { color: "white" } }}
       required
       id="filled-required"
@@ -186,10 +125,10 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
         setInputField(event.target.value);
       }}
       value={inputField}
-      variant="filled"
+      variant="outlined"
     />
   );
-  const uploadProgression = isRecordingOld && (
+  const uploadProgression = isRecording && (
     <div className="mt-2">
       <div className="relative h-2 w-full bg-blue-200">
         <div
@@ -225,6 +164,7 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
             stopRecording();
             setMediaRecorderLocal(null);
             setInputField("");
+            setSaveBlob(false);
             setRecordingDuration(null);
           }}
           className="flex grow place-content-center rounded-lg bg-slate-800 p-3 text-3xl"
@@ -235,15 +175,24 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
       <div className="">
         <button
           onClick={() => {
-            console.log("Saving file", recordingBlob);
-
-            if (isRecording) {
-              setSaveBlob(true);
-              stopRecording();
-            } else if (!recordingBlob) {
-              alert("Vous devez enregistrer un audio avant de le télécharger");
-            } else if (recordingBlob && inputField !== "") {
-              handleUploadFile(recordingBlob);
+            if (!isPaused) {
+              togglePauseResume();
+            }
+            if (inputField.length > 0) {
+              if (isRecording) {
+                setSaveBlob(true);
+                stopRecording();
+              } else if (!recordingBlob && !isRecording) {
+                alert(
+                  "Vous devez enregistrer un audio avant de le télécharger",
+                );
+              } else if (recordingBlob && inputField !== "") {
+                handleUploadFile(recordingBlob);
+              }
+            } else {
+              alert(
+                "Veuillez donner un nom à votre enregistrement et ressayez",
+              );
             }
           }}
           className="flex w-[230px] place-content-center rounded-lg bg-slate-800 p-3"
@@ -272,9 +221,10 @@ const VoiceRecorder: React.FC<VoiceRecorderProps> = ({}) => {
       className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
     >
       {textInput}
-      {mediaRecorderLocal || (recordingBlob && recordingDuration)
+      {(mediaRecorderLocal || saveBlob) && recordingDuration
         ? audioVisualizer
         : null}
+
       {recordControls}
       {uploadProgression}
     </div>
