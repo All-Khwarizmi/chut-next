@@ -20,30 +20,36 @@ export default function DisplayMeter({
   sound,
   isSound,
 }: MeterProps) {
-  const [decibel, setDecibel, sessionArr, setSession, setRecording] = useStore(
-    (state) => [
-      state.decibel,
-      state.setDecibel,
-      state.sessionArr,
-      state.setSession,
-      state.setRecording,
-    ],
-  );
+  const [
+    decibel,
+    setDecibel,
+    sessionArr,
+    setSession,
+    setRecording,
+    setIsSoundPlaying,
+  ] = useStore((state) => [
+    state.decibel,
+    state.setDecibel,
+    state.sessionArr,
+    state.setSession,
+    state.setRecording,
+    state.setIsSoundPlaying,
+  ]);
 
   useEffect(() => {
+    setIsSoundPlaying(false);
     const updateDecibel = () => {
       const val = getDecibel(meter) + 100;
       setDecibel(val);
       setSession(val);
       isInfinity(sessionArr);
     };
-
     const intervalId = setInterval(updateDecibel, 1000);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [sessionArr]);
+  }, []);
 
   // Check if the two last measurements == -Infinity and if so set isRecording to false. On Chrome after reloading the page or other interruption the media api asks for an user action to display allow any audio context.
   const isInfinity = (measuresArr: number[]): void => {
@@ -63,7 +69,7 @@ export default function DisplayMeter({
       <div className="flex place-content-center items-center gap-x-2 pt-3">
         <p
           className={` text-5xl font-bold ${
-            isTooLoud(sessionArr, threshold) ? "text-red-500" : "text-green-500"
+            decibel > threshold ? "text-red-500" : "text-green-500"
           }`}
         >
           {decibel === -Infinity ? "..." : decibel}
