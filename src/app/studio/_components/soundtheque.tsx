@@ -7,6 +7,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { useStore } from "~/utils/stores/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { ListSubheader } from "@mui/material";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "~/utils/firebase";
 
 export default function SoundList() {
   const [soundOptions, setSoundRef, soundRef] = useStore((state) => [
@@ -33,7 +35,14 @@ export default function SoundList() {
           <ListItemButton
             key={crypto.randomUUID()}
             selected={ele.value === soundRef}
-            onClick={(_) => setSoundRef(ele.value)}
+            onClick={(_) => {
+              console.log("Event: select_content");
+              logEvent(analytics, "select_content", {
+                content_type: "sound",
+                content_id: ele.label,
+              });
+              setSoundRef(ele.value);
+            }}
           >
             <ListItemIcon>
               <MusicNoteIcon />
