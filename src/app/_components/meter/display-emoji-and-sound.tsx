@@ -7,11 +7,13 @@ export interface DisplayEmojiProps {
   isSound: boolean;
 }
 export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
-  const [sessionArr, isSoundPlaying, setIsSoundPlaying] = useStore((state) => [
-    state.sessionArr,
-    state.isSoundPlaying,
-    state.setIsSoundPlaying,
-  ]);
+  const [sessionArr, isSoundPlaying, setIsSoundPlaying, setRecording] =
+    useStore((state) => [
+      state.sessionArr,
+      state.isSoundPlaying,
+      state.setIsSoundPlaying,
+      state.setRecording,
+    ]);
   const emoji = getEmoji(sessionArr, threshold);
   if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
     setIsSoundPlaying(true);
@@ -25,7 +27,8 @@ export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
       )
       .catch((e) => {
         //!
-        alert(`Something wrong happened trying to display the audio: ${e}`);
+        setRecording(false);
+        // alert(`Something wrong happened trying to display the audio: ${e}`);
         setIsSoundPlaying(false);
       });
   }
