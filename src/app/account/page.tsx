@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { initFirebase } from "../../utils/firebase";
-import { PremiumPanel } from "./premium-panel";
-import { StandardPanel } from "./standard-panel";
-import { getPremiumStatus } from "./get-premium-status";
-import { deleteUser, signOut, upgradeToPremium } from "./account-helpers";
+import { PremiumPanel } from "./_components/premium-panel";
+import { StandardPanel } from "./_components/standard-panel";
+import { getPremiumStatus } from "./helpers/get-premium-status";
+import { deleteUser, signOut, upgradeToPremium } from "./helpers/account-helpers";
 import { useRouter } from "next/navigation";
 
 export default function AccountPage() {

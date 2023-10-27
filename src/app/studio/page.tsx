@@ -1,7 +1,7 @@
 "use client";
 import AudioUploader from "./_components/audio-uploader";
 import VoiceRecorder from "./_components/voice-recorder";
-import SelectedListItem from "./_components/sound-selected-list";
+import SelectedListItem from "./_components/selected-list-item";
 
 export default function Page() {
   const uploadSound = (

@@ -2,7 +2,7 @@
 import * as React from "react";
 import { initFirebase } from "../utils/firebase";
 import { getAuth } from "@firebase/auth";
-import { getPremiumStatus } from "../app/account/get-premium-status";
+import { getPremiumStatus } from "../app/account/helpers/get-premium-status";
 import Layout from "../app/_components/layout-component";
 import { env } from "~/env.mjs";
 

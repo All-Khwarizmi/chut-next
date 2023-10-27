@@ -3,13 +3,14 @@
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { initFirebase } from "../utils/firebase";
 import { useEffect, useState } from "react";
-import { getPremiumStatus } from "./account/get-premium-status";
+import { getPremiumStatus } from "./account/helpers/get-premium-status";
 import MeterPlayer from "./_components/meter/meter-player";
 import { rightArrow } from "~/shared/helpers-elements";
 import { signIn } from "~/shared/helpers-fns";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
-import { fetchSoundList, useStore } from "~/utils/stores/stores";
+import { useStore } from "~/utils/stores/stores";
+import { fetchSoundList } from "~/utils/stores/store-helpers";
 
 export default function Home() {
   const app = initFirebase();

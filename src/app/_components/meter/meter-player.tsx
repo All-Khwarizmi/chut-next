@@ -9,10 +9,10 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import React, { useState } from "react";
-import { RequestPermission } from "./meter";
 import { useStore } from "~/utils/stores/stores";
-import SoundList from "~/app/studio/_components/sound-list";
+import SoundList from "~/app/studio/_components/soundtheque";
 import { theme } from "~/shared/theme";
+import { SoundContextCreator } from "./sound-context-creator";
 
 const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
@@ -93,6 +93,7 @@ const MeterPlayer = () => {
         control={
           <Switch onChange={() => setIsSound(!isSound)} checked={isSound} />
         }
+        sx={{ fontSize: 28 }}
         label="Activer Son"
       />
     </FormGroup>
@@ -102,7 +103,7 @@ const MeterPlayer = () => {
       <div className="flex h-full  pt-20 text-center">
         <div className="flex flex-col space-y-8">
           {isRecording ? (
-            <RequestPermission threshold={threshold} isSound={isSound} />
+            <SoundContextCreator threshold={threshold} isSound={isSound} />
           ) : (
             <p className=" text-9xl"> 😴</p>
           )}

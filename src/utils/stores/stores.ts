@@ -1,19 +1,43 @@
 "use client";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { create } from "zustand";
-import { storageBucket } from "../firebase";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+
+interface HistoryObject {
+  date: Date;
+  measures: Array<number>;
+}
+
+type SessionsHistory = Array<HistoryObject>;
+
+type Session = Array<number>;
+
+// on start recording fill the sessionArr with the sounds measures ✅
+// on stop recording                  ❌
+// push the sessionArr to the history ✅
+// reset the sessionArr               ✅
+// log                                ❌
+// the average noise level            ❌
+// number of measures = time          ❌
+// Date                               ❌
+// User ID                            ❌
 
 interface StoreState {
   isRecording: boolean;
+  isSoundPlaying: boolean;
   threshold: number;
   soundRef: string;
   decibel: number;
   update: boolean;
   soundList: SoundOptions[];
+  setIsSoundPlaying: (isPlaying: boolean) => void;
   backupSoundList: SoundOptions[];
   userSounds: SoundOptions[];
   userRecords: SoundOptions[];
+  sessionArr: Session;
+  sessionHistory: SessionsHistory;
+  setSession: (measure: number) => void;
+
+  pushSessionArr: () => void;
   setRecording: (isRecording: boolean) => void;
   setDecibel: (decibel: number) => void;
   setThreshold: (threshold: number) => void;
@@ -70,6 +94,7 @@ export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
       isRecording: false,
+      isSoundPlaying: false,
       threshold: 80, // Set your initial threshold value here
       soundRef: "./shhh.mp3", // Set your initial audio element here
       decibel: 0,
@@ -78,10 +103,35 @@ export const useStore = create<StoreState>()(
       userRecords: [],
       userSounds: [],
       update: false,
-      setRecording: (isRecording: boolean) => set({ isRecording }),
+      sessionArr: [],
+      sessionHistory: [],
+      setIsSoundPlaying: (isPlaying) => set({isSoundPlaying: isPlaying}),
+      setSession: (measure: number) => {
+        const sessionArr = get().sessionArr;
+        sessionArr.push(measure);
+        set({ sessionArr });
+      },
+      pushSessionArr: () => {
+        const sessionArr = get().sessionArr;
+        const sessionHistory = get().sessionHistory;
+        sessionHistory.push({
+          date: new Date(),
+          measures: sessionArr,
+        });
+        set({ sessionArr: [] });
+      },
+      setRecording: (isRecording: boolean) => {
+        const prevRecordingState = get().isRecording;
+        if (prevRecordingState === false && isRecording === true) {
+          set({ isRecording: true });
+        } else if (prevRecordingState === true && isRecording === false) {
+          set({ isRecording: false });
+          get().pushSessionArr();
+        }
+      },
       setDecibel: (decibel: number) => set({ decibel }),
       setThreshold: (threshold: number) => set({ threshold }),
-      //
+
       setSoundRef: (soundRef: string) => {
         set((prev) => {
           // Update soundList. Since the soundList might hold records from premium user we remove it whenever users switch to another sound. But ideally, we will have to get user premium state so that we can leave any premium sound for as long as the user is premium.
@@ -186,38 +236,4 @@ export const useStore = create<StoreState>()(
   ),
 );
 
-// Fetch sound list from Firebase Storage and set it in the store
-export const fetchSoundList = async () => {
-  const storageRef = ref(storageBucket, "sounds/"); // Reference to your Firebase Storage bucket
 
-  // List all objects in the bucket
-
-  listAll(storageRef)
-    .then((result) => {
-      const soundOptionsArr: SoundOptions[] = [];
-      result.items.map((item) => {
-        getDownloadURL(item).then((url) => {
-          const soundObj = { label: item.name, value: url };
-          soundOptionsArr.push(soundObj);
-          useStore.setState((prev) => {
-            if (
-              !prev.soundList.some(
-                (element) =>
-                  element.label === soundObj.label &&
-                  element.value === soundObj.value,
-              )
-            ) {
-              prev.soundList = [...prev.soundList, soundObj];
-              prev.backupSoundList = [...prev.soundList, soundObj];
-              return { ...prev };
-            } else {
-              return prev;
-            }
-          });
-        });
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching sound list:", error);
-    });
-};

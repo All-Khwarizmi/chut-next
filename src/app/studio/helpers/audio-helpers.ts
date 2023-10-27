@@ -76,3 +76,10 @@ export async function isBlobValid(
   }
 }
 
+export const durationFormatter = (duration: number) => {
+  const minutes = Math.floor(duration / 60);
+  const seconds = duration % 60;
+  return `${minutes.toFixed(0).padStart(1, "0")}:${seconds
+    .toFixed(0)
+    .padStart(2, "0")}`;
+};

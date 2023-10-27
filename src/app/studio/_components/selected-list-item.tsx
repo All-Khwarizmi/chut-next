@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 
 import { ThemeProvider } from "@mui/material";
 import UserSounds from "~/app/studio/_components/user-sounds";
-import SoundList from "./sound-list";
+import SoundList from "./soundtheque";
 import { theme } from "~/shared/theme";
 
 export default function SelectedListItem() {

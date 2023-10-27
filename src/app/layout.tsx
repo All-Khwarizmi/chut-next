@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import AuthRouter from "./auth-router";
+import AuthRouter from "../utils/router/auth-router";
 import Layout from "./_components/layout-component";
 
 const inter = Inter({

@@ -11,8 +11,7 @@ import { MdSave } from "react-icons/md";
 import { RxReset } from "react-icons/rx";
 import { LiveAudioVisualizer } from "react-audio-visualize";
 import { theme } from "~/shared/theme";
-import { isAudioFileValid, isBlobValid } from "../helpers/audio-helpers";
-import { check } from "prettier";
+import { durationFormatter, isBlobValid } from "../helpers/audio-helpers";
 import { checkPremiumUsage } from "~/utils/stores/store-helpers";
 
 const VoiceRecorder: React.FC = () => {
@@ -51,6 +50,7 @@ const VoiceRecorder: React.FC = () => {
     recordingTime,
     mediaRecorder,
   } = useAudioRecorder();
+  
   useEffect(() => {
     if (mediaRecorder) {
       setMediaRecorderLocal(mediaRecorder);
@@ -257,7 +257,7 @@ const VoiceRecorder: React.FC = () => {
       />
     </div>
   );
-  const newRecorder = (
+  const recorder = (
     <div
       id="user-records"
       className="place flex w-[360px] flex-col place-items-center gap-y-3 rounded-lg bg-mediumGray p-4"
@@ -270,18 +270,7 @@ const VoiceRecorder: React.FC = () => {
     </div>
   );
 
-  return newRecorder;
+  return recorder;
 };
 
 export default VoiceRecorder;
-
-export const durationFormatter = (duration: number) => {
-  const minutes = Math.floor(duration / 60);
-  const seconds = duration % 60;
-  return `${minutes.toFixed(0).padStart(1, "0")}:${seconds
-    .toFixed(0)
-    .padStart(2, "0")}`;
-};
-function checkSoundName(name: any) {
-  throw new Error("Function not implemented.");
-}
