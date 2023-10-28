@@ -32,7 +32,7 @@ export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
         .catch((e) => {
           // setRecording(false);
           setIsSoundPlaying(false);
-          alert(`Something wrong happened trying to display the audio: ${e}`);
+          // alert(`Something wrong happened trying to display the audio: ${e}`);
         });
     }
   }, [isSoundPlaying, isSound, sessionArr.length]);
