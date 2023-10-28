@@ -18,6 +18,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
+import AudioTest from "./try-audio";
 interface UserSoundsProps {
   pathName: string;
   title: string;
@@ -244,6 +245,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
           autoFocus
           onClick={() => {
             if (audioUrl) {
+              console.log(audioUrl);
               const sampleAudio = new Audio(audioUrl);
               sampleAudio.load();
               sampleAudio
@@ -322,7 +324,8 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
           </ListItem>
         );
       })}
-      {playSoundDialog}
+      {/* {playSoundDialog} */}
+      <AudioTest audioUrl={audioUrl} isOpen={open} handleClose={handleClose} />
     </List>
   );
 
