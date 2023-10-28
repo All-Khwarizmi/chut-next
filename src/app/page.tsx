@@ -30,8 +30,11 @@ export default function Home() {
         : false;
 
       setIsPremium(newPremiumStatus);
+
+      checkPremium().catch((e) =>
+        alert(`Could not get user premium status: ${e}`),
+      );
     };
-    checkPremium().catch((e) => console.log(e));
   }, [app, auth.currentUser?.uid]);
 
   useEffect(() => {
