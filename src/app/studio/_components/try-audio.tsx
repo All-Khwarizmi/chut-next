@@ -39,6 +39,14 @@ export default function AudioTest({
   isOpen: open,
   handleClose,
 }: AudioTestProps) {
+  const [audio, setAudio] = useState<HTMLAudioElement | null>();
+  useEffect(() => {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      setAudio(audio);
+    }
+  }, [audioUrl, open]);
+
   const playSoundDialog = (
     <BootstrapDialog
       onClose={handleClose}
@@ -72,11 +80,11 @@ export default function AudioTest({
           }}
           autoFocus
           onClick={() => {
-            if (audioUrl) {
+            if (audioUrl && audio) {
               console.log(audioUrl);
-              const sampleAudio = new Audio(audioUrl);
+              //   const sampleAudio = new Audio(audioUrl);
               //   sampleAudio.load();
-              sampleAudio
+              audio
                 .play()
                 .then(() => {})
                 .catch((e) => {
