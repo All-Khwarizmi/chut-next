@@ -18,24 +18,23 @@ export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
 
   const emoji = getEmoji(sessionArr, threshold);
 
-  useEffect(() => {
-    if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
-      setIsSoundPlaying(true);
-      sound
-        .play()
-        .then(() => {
-          setTimeout(
-            () => setIsSoundPlaying(false),
-            sound.duration * 1000 + 2000,
-          );
-        })
-        .catch((e) => {
-          // setRecording(false);
-          setIsSoundPlaying(false);
-          // alert(`Something wrong happened trying to display the audio: ${e}`);
-        });
-    }
-  }, [isSoundPlaying, isSound, sessionArr.length]);
+  if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
+    setIsSoundPlaying(true);
+    sound
+      .play()
+      .then(() => {
+        setTimeout(
+          () => setIsSoundPlaying(false),
+          sound.duration * 1000 + 2000,
+        );
+      })
+      .catch((e) => {
+        setRecording(false);
+        setIsSoundPlaying(false);
+        alert(`Something wrong happened trying to display the audio: ${e}`);
+      });
+  }
+  // useEffect(() => {}, [isSoundPlaying, isSound, sessionArr.length]);
 
   return <div className="pb-3 text-9xl">{emoji}</div>;
 }
