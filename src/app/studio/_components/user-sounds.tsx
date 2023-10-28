@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { ref, listAll, getDownloadURL, deleteObject } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { analytics, initFirebase, storageBucket } from "~/utils/firebase";
+import { initFirebase, storageBucket } from "~/utils/firebase";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -10,13 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { SoundOptions, useStore } from "~/utils/stores/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { styled } from "@mui/material/styles";
-import {
-  IconButton,
-  ListSubheader,
-  ListItem,
-  Button,
-  LinearProgress,
-} from "@mui/material";
+import { IconButton, ListSubheader, ListItem, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PlayArrow } from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
@@ -44,7 +38,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
-  // const [isPlaying, setIsPlaying] = useState(false);
   const [
     soundOptions,
     setSoundRef,
@@ -206,7 +199,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
   };
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -253,7 +245,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
           onClick={() => {
             if (audioUrl) {
               const sampleAudio = new Audio(audioUrl);
-
+              sampleAudio.load();
               sampleAudio
                 .play()
                 .then(() => {})
@@ -315,28 +307,6 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
                 console.log("click open and open is:", open);
                 setAudioUrl(ele.value);
                 handleClickOpen();
-                // if (!isSoundPlaying) {
-                //   const sampleAudio = new Audio(ele.value);
-                //   setIsSoundPlaying(true);
-                //   // setIsPlaying(true);
-                //   sampleAudio
-                //     .play()
-                //     .then(() => {
-                //       setTimeout(
-                //         () => {
-                //           return setIsSoundPlaying(false);
-                //           // setIsPlaying(false);
-                //         },
-                //         sampleAudio.duration * 1000 + 200,
-                //       );
-                //     })
-                //     .catch((e) => {
-                //       setIsSoundPlaying(false);
-                //       // setIsPlaying(false);
-                //       console.log(`Error happened playing user sound: ${e}`);
-                //       alert(`Error happened playing user sound: ${e}`);
-                //     });
-                // }
               }}
             >
               <PlayArrow />
