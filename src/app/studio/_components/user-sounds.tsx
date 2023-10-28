@@ -9,10 +9,21 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { SoundOptions, useStore } from "~/utils/stores/stores";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import { IconButton, ListSubheader, ListItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import {
+  IconButton,
+  ListSubheader,
+  ListItem,
+  Button,
+  LinearProgress,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { PlayArrow } from "@mui/icons-material";
-import { logEvent } from "firebase/analytics";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import CloseIcon from "@mui/icons-material/Close";
 interface UserSoundsProps {
   pathName: string;
   title: string;
@@ -21,10 +32,19 @@ export interface SoundOption {
   label: string;
   value: string;
 }
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const [
     soundOptions,
     setSoundRef,
@@ -41,6 +61,8 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     deleteUserSounds,
     setSoundList,
     removeFromSoundList,
+    isSoundPlaying,
+    setIsSoundPlaying,
   ] = useStore((state) => [
     state.soundList,
     state.setSoundRef,
@@ -57,6 +79,8 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
     state.deleteUserSounds,
     state.setSoundList,
     state.removeFromSoundList,
+    state.isSoundPlaying,
+    state.setIsSoundPlaying,
   ]);
   const [checkUserSoundList, setCheckUserSoundList] = useState<SoundOptions[]>(
     [],
@@ -180,9 +204,76 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
       }
     }
   };
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const isSoundsOrRecords = () =>
     pathName === "sounds" ? userSounds : userRecords;
+
+  const playSoundDialog = (
+    <BootstrapDialog
+      onClose={handleClose}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+    >
+      <DialogTitle
+        sx={{ m: 0, p: 4 }}
+        id="customized-dialog-title"
+      ></DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={handleClose}
+        sx={{
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+      <DialogContent>
+        {" "}
+        <Button
+          sx={{
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingRight: 8,
+            paddingLeft: 8,
+          }}
+          autoFocus
+          onClick={() => {
+            if (audioUrl) {
+              const sampleAudio = new Audio(audioUrl);
+
+              sampleAudio
+                .play()
+                .then(() => {})
+                .catch((e) => {
+                  console.log(`Error happened playing user sound: ${e}`);
+                  alert(`Error happened playing user sound: ${e}`);
+                });
+            }
+          }}
+        >
+          <PlayArrow />
+        </Button>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleClose}>
+          close
+        </Button>
+      </DialogActions>
+    </BootstrapDialog>
+  );
   const userSoundsBloc = (
     <List
       sx={{ p: 2 }}
@@ -202,10 +293,10 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
               selected={ele.label === soundRef}
               onClick={(_) => {
                 console.log("Event: select_content");
-                logEvent(analytics, "select_content", {
-                  content_type: "sound",
-                  content_id: ele.label,
-                });
+                // logEvent(analytics, "select_content", {
+                //   content_type: "sound",
+                //   content_id: ele.label,
+                // });
                 if (soundRef !== ele.value) {
                   setSoundRef(ele.value);
                   if (!soundOptions.some((e) => e.value === ele.value)) {
@@ -221,8 +312,31 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
             </ListItemButton>
             <IconButton
               onClick={() => {
-                const sampleAudio = new Audio(ele.value);
-                sampleAudio.play();
+                console.log("click open and open is:", open);
+                setAudioUrl(ele.value);
+                handleClickOpen();
+                // if (!isSoundPlaying) {
+                //   const sampleAudio = new Audio(ele.value);
+                //   setIsSoundPlaying(true);
+                //   // setIsPlaying(true);
+                //   sampleAudio
+                //     .play()
+                //     .then(() => {
+                //       setTimeout(
+                //         () => {
+                //           return setIsSoundPlaying(false);
+                //           // setIsPlaying(false);
+                //         },
+                //         sampleAudio.duration * 1000 + 200,
+                //       );
+                //     })
+                //     .catch((e) => {
+                //       setIsSoundPlaying(false);
+                //       // setIsPlaying(false);
+                //       console.log(`Error happened playing user sound: ${e}`);
+                //       alert(`Error happened playing user sound: ${e}`);
+                //     });
+                // }
               }}
             >
               <PlayArrow />
@@ -238,6 +352,7 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
           </ListItem>
         );
       })}
+      {playSoundDialog}
     </List>
   );
 

@@ -20,10 +20,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// export const analytics = isSupported().then((yes) =>
-//   yes ? getAnalytics(app) : null,
-// );
-export const analytics = getAnalytics(app);
+export const analytics = isSupported().then((yes) =>
+  yes ? getAnalytics(app) : null,
+);
+// export const analytics = getAnalytics(app);
 
 export const initFirebase = () => app;
 export const storageBucket = getStorage(app);

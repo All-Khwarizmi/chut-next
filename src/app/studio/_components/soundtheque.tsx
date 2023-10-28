@@ -37,10 +37,10 @@ export default function SoundList() {
             selected={ele.value === soundRef}
             onClick={(_) => {
               console.log("Event: select_content");
-              logEvent(analytics, "select_content", {
-                content_type: "sound",
-                content_id: ele.label,
-              });
+              // logEvent(analytics, "select_content", {
+              //   content_type: "sound",
+              //   content_id: ele.label,
+              // });
               setSoundRef(ele.value);
             }}
           >
