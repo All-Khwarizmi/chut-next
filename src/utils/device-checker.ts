@@ -12,5 +12,5 @@ export function isSafari() {
 }
 
 export function safariOrMobile() {
-  return isSafari() || checkDevice().isMobile;
+  return isSafari() /* || checkDevice().isMobile */;
 }
