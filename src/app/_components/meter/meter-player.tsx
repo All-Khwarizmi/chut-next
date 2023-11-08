@@ -102,11 +102,8 @@ const MeterPlayer = () => {
     <>
       <div className="flex h-full  pt-20 text-center">
         <div className="flex flex-col space-y-5">
-          {isRecording ? (
-            <SoundContextCreator threshold={threshold} isSound={isSound} />
-          ) : (
-            <p className=" text-9xl"> 😴</p>
-          )}
+          <SoundContextCreator threshold={threshold} isSound={isSound} />
+
           <div className="flex place-content-center pb-4">{slider}</div>
           <form className="flex flex-col place-content-center">
             {soundSwitch}

@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 export interface DisplayEmojiProps {
   threshold: number;
-  sound: HTMLAudioElement;
+
   isSound: boolean;
 }
-export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
+export function DisplayEmoji({ threshold, isSound }: DisplayEmojiProps) {
   const [
     sessionArr,
     isSoundPlaying,
@@ -25,6 +25,7 @@ export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
   const emoji = getEmoji(sessionArr, threshold);
 
   useEffect(() => {
+    console.log("display emoji and sound");
     if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
       setIsSoundPlaying(true);
       const audio = new Audio();
@@ -34,7 +35,7 @@ export function DisplayEmoji({ threshold, sound, isSound }: DisplayEmojiProps) {
         .then(() => {
           setTimeout(
             () => setIsSoundPlaying(false),
-            sound.duration * 1000 + 2000,
+            audio.duration * 1000 + 2000,
           );
         })
         .catch((e) => {

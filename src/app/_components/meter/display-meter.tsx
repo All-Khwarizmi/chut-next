@@ -5,19 +5,16 @@ import * as Tone from "tone";
 import { getDecibel } from "~/utils/tone-helpers";
 import { DisplayEmoji } from "./display-emoji-and-sound";
 import { noiseLevelComment } from "../helpers/noise-levels-comment";
-import { isTooLoud } from "../helpers/is-too-loud";
 
 export interface MeterProps {
   meter: Tone.Meter;
   threshold: number;
-  sound: HTMLAudioElement;
   isSound: boolean;
 }
 
 export default function DisplayMeter({
   meter,
   threshold,
-  sound,
   isSound,
 }: MeterProps) {
   const [
@@ -39,6 +36,7 @@ export default function DisplayMeter({
   useEffect(() => {
     setIsSoundPlaying(false);
     const updateDecibel = () => {
+      console.log("updating decibel");
       const val = getDecibel(meter) + 100;
       setDecibel(val);
       setSession(val);
@@ -65,7 +63,7 @@ export default function DisplayMeter({
 
   return (
     <div>
-      <DisplayEmoji threshold={threshold} sound={sound} isSound={isSound} />
+      <DisplayEmoji threshold={threshold} isSound={isSound} />
       <div className="flex place-content-center items-center gap-x-2 pt-3">
         <p
           className={` text-5xl font-bold ${

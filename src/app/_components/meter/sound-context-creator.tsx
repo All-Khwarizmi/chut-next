@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import * as Tone from "tone";
 import { useStore } from "~/utils/stores/stores";
 import DisplayMeter from "./display-meter";
@@ -9,34 +9,45 @@ interface RecordProps {
 }
 
 export function SoundContextCreator({ threshold, isSound }: RecordProps) {
-  const meter = new Tone.Meter();
-  const [soundUrl, setSoundRef, soundList] = useStore((state) => [
+  const [soundUrl, setSoundRef, soundList, isRecording] = useStore((state) => [
     state.soundRef,
     state.setSoundRef,
     state.soundList,
+    state.isRecording,
   ]);
+
+  // If statement and display conditionally
+  const meter = new Tone.Meter();
 
   useEffect(() => {
     const mic = new Tone.UserMedia();
-    mic.open();
-    mic.connect(meter);
-    Tone.context.resume();
+    if (isRecording) {
+      mic
+        .open()
+        .then(() => console.log("Mic openned"))
+        .catch((e) => console.log("Error openning mic: " + e));
+      mic.connect(meter);
+      meter.context.resume();
+    } else {
+      console.log("Mic closed");
+      mic.close();
+      mic.dispose();
+      meter.dispose();
+    }
 
-    // Try to change to this other one
-    // mic.context.resume();
     return () => {
       mic.close();
+      mic.dispose();
+      meter.dispose();
     };
-  }, []);
-
-  return (
-    <>
-      <DisplayMeter
-        meter={meter}
-        threshold={threshold}
-        sound={new Audio(soundUrl)}
-        isSound={isSound}
-      />
-    </>
-  );
+  }, [isRecording]);
+  if (!isRecording) {
+    return <p className=" text-9xl"> 😴</p>;
+  } else {
+    return (
+      <>
+        <DisplayMeter meter={meter} threshold={threshold} isSound={isSound} />
+      </>
+    );
+  }
 }
