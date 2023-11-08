@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useStore } from "~/utils/stores/stores";
 import { fetchSoundList } from "~/utils/stores/store-helpers";
 import { check } from "prettier";
-import checkDevice, { isSafari, safariOrMobile } from "~/utils/device-checker";
+import checkDevice, { isSafari, isSafariDesktop } from "~/utils/device-checker";
 import WrongDeviceSnackbar from "~/shared/device-snackbar";
 import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 import SuccessToast from "~/shared/toast";
@@ -91,7 +91,7 @@ export default function Home() {
     <div className="flex  grow p-4  lg:flex-1 ">
       <div className="flex  grow flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
         <div className="pt-20 md:pt-12">
-          {safariOrMobile() ? (
+          {isSafariDesktop() ? (
             <WrongDeviceSnackbar open={open} handleOpen={handleClickOpen} />
           ) : null}
         </div>

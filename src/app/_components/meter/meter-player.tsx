@@ -19,7 +19,7 @@ import { useStore } from "~/utils/stores/stores";
 import SoundList from "~/app/studio/_components/soundtheque";
 import { theme } from "~/shared/theme";
 import { SoundContextCreator } from "./sound-context-creator";
-import { safariOrMobile } from "~/utils/device-checker";
+import { isSafariDesktop } from "~/utils/device-checker";
 import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 
 const MeterPlayer = () => {
@@ -90,12 +90,11 @@ const MeterPlayer = () => {
       <button
         className="w-[340px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => {
-          setRecording(false);
-          // if (!safariOrMobile()) {
-
-          // } else {
-          //   setOpen(false);
-          // }
+          if (!isSafariDesktop()) {
+            setRecording(false);
+          } else {
+            setOpen(false);
+          }
         }}
       >
         Stop
@@ -106,12 +105,11 @@ const MeterPlayer = () => {
       <button
         className="w-[340px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => {
-          setRecording(true);
-          // if (!safariOrMobile()) {
-
-          // } else {
-          //   setOpen(true);
-          // }
+          if (!isSafariDesktop()) {
+            setRecording(true);
+          } else {
+            setOpen(true);
+          }
         }}
       >
         Start Recording

@@ -6,7 +6,7 @@ import { useState } from "react";
 import WrongDeviceSnackbar from "~/shared/device-snackbar";
 import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 import SuccessToast from "~/shared/toast";
-import { safariOrMobile } from "~/utils/device-checker";
+import { isSafariDesktop } from "~/utils/device-checker";
 
 export default function Page() {
   const [open, setOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function Page() {
       <div className="flex flex-col lg:grid lg:grid-cols-2">
         <div className="flex flex-col place-content-start gap-y-5 p-8 pt-24 md:px-20 md:pt-12">
           <div className="flex place-content-center">
-            {safariOrMobile() ? (
+            {isSafariDesktop() ? (
               <WrongDeviceSnackbar open={open} handleOpen={handleClickOpen} />
             ) : null}
           </div>

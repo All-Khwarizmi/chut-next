@@ -29,8 +29,7 @@ export function DisplayEmoji({ threshold, isSound, sound }: DisplayEmojiProps) {
       setIsSoundPlaying(true);
       const audioCtx = new AudioContext();
       audioCtx.resume();
-      // const audio = new Audio();
-      // audio.src = soundRef;
+
       if (sound) {
         sound
           .play()
