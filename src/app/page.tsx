@@ -57,12 +57,12 @@ export default function Home() {
     setOpen(false);
   };
   const mainTitle = (title: string) => (
-    <div className="px-5 text-4xl sm:text-4xl lg:text-6xl">{title}</div>
+    <div className="px-5 text-xl lg:text-3xl">{title}</div>
   );
   const subTitle = (subTitle: string) => (
     <div
       className=" px-5
-      sm:mb-8 sm:text-xl xl:text-2xl"
+     pb-4 text-lg md:pb-8 lg:text-xl"
     >
       {subTitle}
     </div>
@@ -100,19 +100,15 @@ export default function Home() {
     </div>
   );
   const rightSide = (
-    <div className=" p-4 pt-20 text-white lg:flex-1">
-      <div className="flex  flex-col place-items-center justify-center gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+    <div className=" md:pt12 flex place-content-center p-4 pb-8 pt-20 text-white lg:flex-1">
+      <div className="place-items-left flex flex-col justify-center gap-y-2 text-4xl sm:text-5xl md:place-items-center md:gap-y-4 ">
+        {user ? mainTitle("Chut Premium :") : mainTitle("Chut Premium : ")}
         {user
-          ? mainTitle(
-              "De la Satisfaction à la Fidélité : Les Histoires de Succès de Chut",
-            )
-          : mainTitle("Welcome to Our Landing Page")}
+          ? subTitle("Votre Classe, Vos Sons.")
+          : subTitle("Votre Classe, Vos Sons.")}
         {user
-          ? subTitle(
-              "Des Utilisateurs Qui ont Fait de la Concentration un Art de Vivre",
-            )
-          : subTitle("Explore our amazing features and get started today!")}
-        {user ? ctaButton("Get Started") : loginButton("Login with Google")}
+          ? ctaButton("Devenir Premium")
+          : loginButton("Se Connecter Avec Google")}
       </div>
     </div>
   );
