@@ -27,8 +27,12 @@ export function DisplayEmoji({ threshold, isSound }: DisplayEmojiProps) {
   useEffect(() => {
     if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
       setIsSoundPlaying(true);
+      const audioCtx = new AudioContext();
+      audioCtx.resume();
+
       const audio = new Audio();
       audio.src = soundRef;
+
       audio
         .play()
         .then(() => {
