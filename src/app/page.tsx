@@ -90,9 +90,11 @@ export default function Home() {
   const leftSide = (
     <div className="flex  grow p-4  lg:flex-1 ">
       <div className="flex  grow flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
-        {safariOrMobile() ? (
-          <WrongDeviceSnackbar open={open} handleOpen={handleClickOpen} />
-        ) : null}
+        <div className="pt-20 md:pt-12">
+          {safariOrMobile() ? (
+            <WrongDeviceSnackbar open={open} handleOpen={handleClickOpen} />
+          ) : null}
+        </div>
         <MeterPlayer />
       </div>
     </div>
