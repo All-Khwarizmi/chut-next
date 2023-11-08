@@ -1,28 +1,39 @@
-# Create T3 App
+# Chut - Classroom Noise Management App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Chut is a unique classroom noise management application designed to help teachers maintain an optimal noise level in their classrooms, fostering an environment conducive to learning.
 
-## What's next? How do I make an app with this?
+## Table of Contents
+- [Chut - Classroom Noise Management App](#chut---classroom-noise-management-app)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
+- **Chut Premium:** Provides the ability to upload or record up to 20 custom sounds, enhancing the classroom noise management experience.
+- **Real-time Audible Alerts:** Notifies students when the noise level exceeds a set limit, promoting self-regulation.
+- **Recall Quiz Application:** Utilizes spaced repetition for effective memorization, coupled with push notifications for timely quizzes.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Installation
+To use Chut, follow these steps:
+1. Clone the repository: `git clone https://github.com/yourusername/chut.git`
+2. Install dependencies: `npm install`
+3. Configure settings: Adjust noise levels, alert thresholds, and other configurations in the settings file.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Usage
+- To start the application, run `npm start`.
+- Access the Chut Premium features through the settings menu in the application interface.
+- For API documentation and additional details, refer to the [Wiki](https://github.com/yourusername/chut/wiki).
 
-## Learn More
+## Contributing
+We welcome contributions! To contribute to Chut, follow these steps:
+1. Fork the repository.
+2. Create your feature branch: `git checkout -b feature/AmazingFeature`
+3. Commit your changes: `git commit -m 'Add some AmazingFeature'`
+4. Push to the branch: `git push origin feature/AmazingFeature`
+5. Open a pull request.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## License
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). You are free to modify and distribute the project as per the license terms.
