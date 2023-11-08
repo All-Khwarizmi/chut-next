@@ -88,11 +88,12 @@ const MeterPlayer = () => {
       <button
         className="w-[340px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => {
-          if (!safariOrMobile()) {
-            setRecording(false);
-          } else {
-            setOpen(false);
-          }
+          setRecording(false);
+          // if (!safariOrMobile()) {
+
+          // } else {
+          //   setOpen(false);
+          // }
         }}
       >
         Stop
@@ -103,11 +104,12 @@ const MeterPlayer = () => {
       <button
         className="w-[340px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
         onClick={() => {
-          if (!safariOrMobile()) {
-            setRecording(true);
-          } else {
-            setOpen(true);
-          }
+          setRecording(true);
+          // if (!safariOrMobile()) {
+
+          // } else {
+          //   setOpen(true);
+          // }
         }}
       >
         Start Recording
@@ -152,10 +154,9 @@ const MeterPlayer = () => {
           {startAndStopRecordingButton}
         </div>
       </div>
-      <WrongDeviceDialog  open={open} handleClose={handleClose} />
+      <WrongDeviceDialog open={open} handleClose={handleClose} />
     </>
   );
 };
 
 export default MeterPlayer;
-
