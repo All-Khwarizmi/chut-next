@@ -33,19 +33,18 @@ export function DisplayEmoji({ threshold, isSound }: DisplayEmojiProps) {
       const audio = new Audio();
       audio.src = soundRef;
 
-      audio
-        .play()
-        .then(() => {
-          setTimeout(
-            () => setIsSoundPlaying(false),
-            audio.duration * 1000 + 2000,
-          );
-        })
-        .catch((e) => {
-          setRecording(false);
-          setIsSoundPlaying(false);
-          alert(`Something wrong happened trying to display the audio: ${e}`);
-        });
+      audio.play();
+      // .then(() => {
+      //   setTimeout(
+      //     () => setIsSoundPlaying(false),
+      //     audio.duration * 1000 + 2000,
+      //   );
+      // })
+      // .catch((e) => {
+      //   setRecording(false);
+      //   setIsSoundPlaying(false);
+      //   alert(`Something wrong happened trying to display the audio: ${e}`);
+      // });
     }
   }, [isSoundPlaying, isSound, sessionArr.length]);
 
