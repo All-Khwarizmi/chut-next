@@ -36,7 +36,6 @@ export default function DisplayMeter({
   useEffect(() => {
     setIsSoundPlaying(false);
     const updateDecibel = () => {
-      console.log("updating decibel");
       const val = getDecibel(meter) + 100;
       setDecibel(val);
       setSession(val);

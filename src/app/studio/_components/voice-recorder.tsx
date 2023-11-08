@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { initFirebase, storageBucket } from "~/utils/firebase";
-import { getAuth } from "@firebase/auth";
+import { GoogleAuthProvider, getAuth } from "@firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { TextField } from "@mui/material";
@@ -13,14 +13,21 @@ import { LiveAudioVisualizer } from "react-audio-visualize";
 import { theme } from "~/shared/theme";
 import { durationFormatter, isBlobValid } from "../helpers/audio-helpers";
 import { checkPremiumUsage } from "~/utils/stores/store-helpers";
+import { get } from "http";
+import { getPremiumStatus } from "~/app/account/helpers/get-premium-status";
+import { GoPremiumDialog } from "~/shared/premium-dialog";
+import { NotSignedInDialog } from "~/shared/auth-dialog";
 
 const VoiceRecorder: React.FC = () => {
   const app = initFirebase();
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
+  const provider = new GoogleAuthProvider();
+
   const [inputField, setInputField] = useState<string>("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [saveBlob, setSaveBlob] = useState<boolean>(false);
+
   const [recordingDuration, setRecordingDuration] = useState<number | null>();
   const [mediaRecorderLocal, setMediaRecorderLocal] =
     useState<MediaRecorder | null>(null);
@@ -50,7 +57,7 @@ const VoiceRecorder: React.FC = () => {
     recordingTime,
     mediaRecorder,
   } = useAudioRecorder();
-  
+
   useEffect(() => {
     if (mediaRecorder) {
       setMediaRecorderLocal(mediaRecorder);
@@ -66,6 +73,18 @@ const VoiceRecorder: React.FC = () => {
     recordingBlob,
     mediaRecorder,
   ]);
+  const [isConnected, setIsConnected] = useState<boolean>(
+    () => auth.currentUser !== null,
+  );
+  const [openAuhtDialog, setOpenAuthDialog] = useState(false);
+  const [openPremiumDialog, setOpenPremiumDialog] = useState(false);
+  const handleClickOpen = () => {
+    isConnected ? setOpenPremiumDialog(true) : setOpenAuthDialog(true);
+  };
+
+  const handleClose = () => {
+    isConnected ? setOpenPremiumDialog(false) : setOpenAuthDialog(false);
+  };
 
   const handleUploadFile = async (blob: Blob) => {
     if (blob && inputField.length !== 0) {
@@ -216,25 +235,33 @@ const VoiceRecorder: React.FC = () => {
       <div className="">
         <button
           onClick={async () => {
-            if (!isPaused) {
-              togglePauseResume();
-            }
-            if (inputField.length > 0) {
-              if (isRecording) {
-                setSaveBlob(true);
-                setRecordingDuration(recordingTime);
-                stopRecording();
-              } else if (!recordingBlob && !isRecording) {
-                alert(
-                  "Vous devez enregistrer un audio avant de le télécharger",
-                );
-              } else if (recordingBlob && inputField !== "") {
-                await handleUploadFile(recordingBlob);
+            if (user) {
+              if (await getPremiumStatus(app)) {
+                if (!isPaused) {
+                  togglePauseResume();
+                }
+                if (inputField.length > 0) {
+                  if (isRecording) {
+                    setSaveBlob(true);
+                    setRecordingDuration(recordingTime);
+                    stopRecording();
+                  } else if (!recordingBlob && !isRecording) {
+                    alert(
+                      "Vous devez enregistrer un audio avant de le télécharger",
+                    );
+                  } else if (recordingBlob && inputField !== "") {
+                    await handleUploadFile(recordingBlob);
+                  }
+                } else {
+                  alert(
+                    "Veuillez donner un nom à votre enregistrement et ressayez",
+                  );
+                }
+              } else {
+                setOpenPremiumDialog(true);
               }
             } else {
-              alert(
-                "Veuillez donner un nom à votre enregistrement et ressayez",
-              );
+              setOpenAuthDialog(true);
             }
           }}
           className="flex w-[230px] place-content-center rounded-lg bg-slate-800 p-3"
@@ -267,6 +294,20 @@ const VoiceRecorder: React.FC = () => {
 
       {recordControls}
       {uploadProgression}
+      <GoPremiumDialog
+        open={openPremiumDialog}
+        handleClose={handleClose}
+        app={app}
+        message="Vous devez être premium pour enregistrer un son."
+      />
+      <NotSignedInDialog
+        open={openAuhtDialog}
+        handleClose={handleClose}
+        auth={auth}
+        provider={provider}
+        app={app}
+        message="Vous devez être connecté pour enregistrer un son."
+      />
     </div>
   );
 

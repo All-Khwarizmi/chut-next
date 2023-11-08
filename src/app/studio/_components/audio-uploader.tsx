@@ -1,4 +1,4 @@
-import { getAuth } from "@firebase/auth";
+import { GoogleAuthProvider, getAuth } from "@firebase/auth";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -6,6 +6,10 @@ import { initFirebase, storageBucket } from "~/utils/firebase";
 import { checkPremiumUsage } from "~/utils/stores/store-helpers";
 import { useStore } from "~/utils/stores/stores";
 import { isAudioFileValid } from "../helpers/audio-helpers";
+import { getPremiumStatus } from "~/app/account/helpers/get-premium-status";
+import { GoPremiumDialog } from "~/shared/premium-dialog";
+import { NotSignedInDialog } from "~/shared/auth-dialog";
+import { set } from "zod";
 
 //
 const AudioUploader: React.FC = () => {
@@ -14,6 +18,7 @@ const AudioUploader: React.FC = () => {
   const [inputKey, setInputKey] = useState<string>(crypto.randomUUID());
   const app = initFirebase();
   const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
   const [user] = useAuthState(auth);
   const [
     update,
@@ -30,89 +35,114 @@ const AudioUploader: React.FC = () => {
     state.userRecords,
     state.checkSoundName,
   ]);
+  const [isConnected, setIsConnected] = useState<boolean>(
+    () => auth.currentUser !== null,
+  );
+  const [openAuhtDialog, setOpenAuthDialog] = useState(false);
+  const [openPremiumDialog, setOpenPremiumDialog] = useState(false);
+  const handleClickOpen = () => {
+    isConnected ? setOpenPremiumDialog(true) : setOpenAuthDialog(true);
+  };
+
+  const handleClose = () => {
+    isConnected ? setOpenPremiumDialog(false) : setOpenAuthDialog(false);
+  };
   /**
    * @description Uploads a file to firebase storage and adds it to the user's collection of sounds
    * @returns
    */
   const handleUploadFile = async () => {
-    // Check if user has selected a file
-    if (selectedFile) {
-      // Check if user has exceeded the prumim usage limit
-      if (checkPremiumUsage(userSounds, userRecords)) {
-        alert("Vous avez déjà atteint le nombre de fichiers autorisés");
-        setSelectedFile(null);
-        setInputKey(crypto.randomUUID());
-        return;
-      }
-      if (!checkSoundName(selectedFile.name)) {
-        alert(
-          "Le nom du fichier est déjà utilisé, veuillez renommer votre fichier.",
-        );
-        setSelectedFile(null);
-        return;
-      }
-      let isFileValid: boolean = false;
-      try {
-        isFileValid = await isAudioFileValid(selectedFile);
-      } catch (error) {
-        console.log(error);
-        alert(
-          "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
-        );
-        setSelectedFile(null);
-      }
-
-      if (!isFileValid) {
-        alert(
-          "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
-        );
-        setSelectedFile(null);
-        return;
-      }
-      const storageRef = ref(
-        storageBucket,
-        `customers/${user?.uid}/sounds/${selectedFile!.name}`,
-      );
-
-      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-
-      // Listen for state changes and progress
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-          );
-          setUploadProgress(progress); // Update the progress state
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
+    if (user) {
+      if (await getPremiumStatus(app)) {
+        if (selectedFile) {
+          // Check if user has selected a file
+          // Check if user has exceeded the prumim usage limit
+          if (checkPremiumUsage(userSounds, userRecords)) {
+            alert("Vous avez déjà atteint le nombre de fichiers autorisés");
+            setSelectedFile(null);
+            setInputKey(crypto.randomUUID());
+            return;
           }
-        },
-        (error) => {
-          // Handle unsuccessful uploads
-          console.error("Error uploading file:", error);
-          alert(`The following error occurred while uploading file: ${error}`);
-        },
-        () => {
-          // Handle successful uploads on complete
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setUserSounds({ label: selectedFile.name, value: downloadURL });
-            setUpdate(!update);
-            setSelectedFile(null); // Reset the input field
-            setUploadProgress(0); // Reset the progress
-            alert("Fichier téléchargé avec succès");
-          });
-        },
-      );
+          if (!checkSoundName(selectedFile.name)) {
+            alert(
+              "Le nom du fichier est déjà utilisé, veuillez renommer votre fichier.",
+            );
+            setSelectedFile(null);
+            return;
+          }
+          let isFileValid: boolean = false;
+          try {
+            isFileValid = await isAudioFileValid(selectedFile);
+          } catch (error) {
+            console.log(error);
+            alert(
+              "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
+            );
+            setSelectedFile(null);
+          }
+
+          if (!isFileValid) {
+            alert(
+              "Selectionnez un fichier audio valide. Celui-ci ne doit pas exceder 15 secondes ou 2mb",
+            );
+            setSelectedFile(null);
+            return;
+          }
+          const storageRef = ref(
+            storageBucket,
+            `customers/${user?.uid}/sounds/${selectedFile!.name}`,
+          );
+
+          const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+          // Listen for state changes and progress
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              // Observe state change events such as progress, pause, and resume
+              const progress = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+              );
+              setUploadProgress(progress); // Update the progress state
+              console.log("Upload is " + progress + "% done");
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              // Handle unsuccessful uploads
+              console.error("Error uploading file:", error);
+              alert(
+                `The following error occurred while uploading file: ${error}`,
+              );
+            },
+            () => {
+              // Handle successful uploads on complete
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setUserSounds({
+                  label: selectedFile.name,
+                  value: downloadURL,
+                });
+                setUpdate(!update);
+                setSelectedFile(null); // Reset the input field
+                setUploadProgress(0); // Reset the progress
+                alert("Fichier téléchargé avec succès");
+              });
+            },
+          );
+        } else {
+          alert("Selectionnez un fichier audio");
+        }
+      } else {
+        setOpenPremiumDialog(true);
+      }
     } else {
-      alert("Selectionnez un fichier audio");
+      setOpenAuthDialog(true);
     }
   };
   // Handle drag events on the dropzone element (the whole div)
@@ -184,7 +214,7 @@ const AudioUploader: React.FC = () => {
                 ></div>
               </div>
               <p className="mt-2 text-center text-sm">
-               Progression: {uploadProgress}%
+                Progression: {uploadProgress}%
               </p>
             </div>
           )}
@@ -198,6 +228,20 @@ const AudioUploader: React.FC = () => {
           </button>
         </div>
       </div>
+      <GoPremiumDialog
+        open={openPremiumDialog}
+        handleClose={handleClose}
+        app={app}
+        message="Vous devez être premium pour télécharger des fichiers audio"
+      />
+      <NotSignedInDialog
+        open={openAuhtDialog}
+        handleClose={handleClose}
+        auth={auth}
+        provider={provider}
+        app={app}
+        message="Vous devez être connecté pour télécharger des fichiers audio"
+      />
     </>
   );
 };

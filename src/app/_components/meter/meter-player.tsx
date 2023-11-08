@@ -1,6 +1,12 @@
 "use client";
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControlLabel,
   FormGroup,
   Slider,
@@ -13,6 +19,8 @@ import { useStore } from "~/utils/stores/stores";
 import SoundList from "~/app/studio/_components/soundtheque";
 import { theme } from "~/shared/theme";
 import { SoundContextCreator } from "./sound-context-creator";
+import { safariOrMobile } from "~/utils/device-checker";
+import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 
 const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
@@ -25,6 +33,14 @@ const MeterPlayer = () => {
     state.isRecording,
     state.setRecording,
   ]);
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const marks = [
     {
@@ -71,7 +87,13 @@ const MeterPlayer = () => {
     <div className="">
       <button
         className="w-[340px] rounded-lg  bg-red-500 p-3 px-5 text-base shadow-lg hover:bg-red-600 sm:p-4 sm:px-6 sm:text-lg"
-        onClick={() => setRecording(false)}
+        onClick={() => {
+          if (!safariOrMobile()) {
+            setRecording(false);
+          } else {
+            setOpen(false);
+          }
+        }}
       >
         Stop
       </button>
@@ -80,7 +102,13 @@ const MeterPlayer = () => {
     <div>
       <button
         className="w-[340px] rounded-lg bg-green-500 p-3 px-5 text-base shadow-lg hover:bg-green-600 sm:p-4 sm:px-6 sm:text-lg"
-        onClick={() => setRecording(true)}
+        onClick={() => {
+          if (!safariOrMobile()) {
+            setRecording(true);
+          } else {
+            setOpen(true);
+          }
+        }}
       >
         Start Recording
       </button>
@@ -98,6 +126,7 @@ const MeterPlayer = () => {
       />
     </FormGroup>
   );
+
   return (
     <>
       <div className="flex h-full  pt-20 text-center">
@@ -123,8 +152,10 @@ const MeterPlayer = () => {
           {startAndStopRecordingButton}
         </div>
       </div>
+      <WrongDeviceDialog  open={open} handleClose={handleClose} />
     </>
   );
 };
 
 export default MeterPlayer;
+

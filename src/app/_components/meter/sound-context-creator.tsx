@@ -24,12 +24,11 @@ export function SoundContextCreator({ threshold, isSound }: RecordProps) {
     if (isRecording) {
       mic
         .open()
-        .then(() => console.log("Mic openned"))
+        .then(() => {})
         .catch((e) => console.log("Error openning mic: " + e));
       mic.connect(meter);
       meter.context.resume();
     } else {
-      console.log("Mic closed");
       mic.close();
       mic.dispose();
       meter.dispose();

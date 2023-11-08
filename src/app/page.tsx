@@ -11,6 +11,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { useStore } from "~/utils/stores/stores";
 import { fetchSoundList } from "~/utils/stores/store-helpers";
+import { check } from "prettier";
+import checkDevice, { isSafari, safariOrMobile } from "~/utils/device-checker";
+import WrongDeviceSnackbar from "~/shared/device-snackbar";
+import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
+import SuccessToast from "~/shared/toast";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   const app = initFirebase();
@@ -23,6 +29,7 @@ export default function Home() {
     state.soundList,
     state.setSoundList,
   ]);
+
   useEffect(() => {
     const checkPremium = async () => {
       const newPremiumStatus = auth.currentUser
@@ -41,7 +48,14 @@ export default function Home() {
     fetchSoundList();
   }, [soundList]);
   // JSX
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
   const mainTitle = (title: string) => (
     <div className="px-5 text-4xl sm:text-4xl lg:text-6xl">{title}</div>
   );
@@ -76,6 +90,9 @@ export default function Home() {
   const leftSide = (
     <div className="flex  grow p-4  lg:flex-1 ">
       <div className="flex  grow flex-col place-items-center  gap-y-4 text-4xl sm:text-5xl md:text-6xl">
+        {safariOrMobile() ? (
+          <WrongDeviceSnackbar open={open} handleOpen={handleClickOpen} />
+        ) : null}
         <MeterPlayer />
       </div>
     </div>
@@ -103,6 +120,7 @@ export default function Home() {
         {leftSide}
         {rightSide}
       </div>
+      <WrongDeviceDialog open={open} handleClose={handleClose} />
     </>
   );
 }
