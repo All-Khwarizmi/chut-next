@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 export interface DisplayEmojiProps {
   threshold: number;
-
+  sound: HTMLAudioElement;
   isSound: boolean;
 }
-export function DisplayEmoji({ threshold, isSound }: DisplayEmojiProps) {
+export function DisplayEmoji({ threshold, isSound, sound }: DisplayEmojiProps) {
   const [
     sessionArr,
     isSoundPlaying,
@@ -27,24 +27,25 @@ export function DisplayEmoji({ threshold, isSound }: DisplayEmojiProps) {
   useEffect(() => {
     if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
       setIsSoundPlaying(true);
-      const audioCtx = new AudioContext();
-      audioCtx.resume();
+      // const audioCtx = new AudioContext();
+      // audioCtx.resume();
 
-      const audio = new Audio();
-      audio.src = soundRef;
+      // const audio = new Audio();
+      // audio.src = soundRef;
 
-      audio.play();
-      // .then(() => {
-      //   setTimeout(
-      //     () => setIsSoundPlaying(false),
-      //     audio.duration * 1000 + 2000,
-      //   );
-      // })
-      // .catch((e) => {
-      //   setRecording(false);
-      //   setIsSoundPlaying(false);
-      //   alert(`Something wrong happened trying to display the audio: ${e}`);
-      // });
+      sound
+        .play()
+        .then(() => {
+          setTimeout(
+            () => setIsSoundPlaying(false),
+            sound.duration * 1000 + 2000,
+          );
+        })
+        .catch((e) => {
+          setRecording(false);
+          setIsSoundPlaying(false);
+          alert(`Something wrong happened trying to display the audio: ${e}`);
+        });
     }
   }, [isSoundPlaying, isSound, sessionArr.length]);
 

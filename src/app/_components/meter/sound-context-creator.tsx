@@ -6,9 +6,14 @@ import DisplayMeter from "./display-meter";
 interface RecordProps {
   threshold: number;
   isSound: boolean;
+  sound: HTMLAudioElement;
 }
 
-export function SoundContextCreator({ threshold, isSound }: RecordProps) {
+export function SoundContextCreator({
+  threshold,
+  isSound,
+  sound,
+}: RecordProps) {
   const [soundUrl, setSoundRef, soundList, isRecording] = useStore((state) => [
     state.soundRef,
     state.setSoundRef,
@@ -45,7 +50,12 @@ export function SoundContextCreator({ threshold, isSound }: RecordProps) {
   } else {
     return (
       <>
-        <DisplayMeter meter={meter} threshold={threshold} isSound={isSound} />
+        <DisplayMeter
+          meter={meter}
+          threshold={threshold}
+          isSound={isSound}
+          sound={sound}
+        />
       </>
     );
   }

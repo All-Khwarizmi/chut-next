@@ -10,12 +10,14 @@ export interface MeterProps {
   meter: Tone.Meter;
   threshold: number;
   isSound: boolean;
+  sound: HTMLAudioElement;
 }
 
 export default function DisplayMeter({
   meter,
   threshold,
   isSound,
+  sound,
 }: MeterProps) {
   const [
     decibel,
@@ -62,7 +64,7 @@ export default function DisplayMeter({
 
   return (
     <div>
-      <DisplayEmoji threshold={threshold} isSound={isSound} />
+      <DisplayEmoji threshold={threshold} isSound={isSound} sound={sound} />
       <div className="flex place-content-center items-center gap-x-2 pt-3">
         <p
           className={` text-5xl font-bold ${

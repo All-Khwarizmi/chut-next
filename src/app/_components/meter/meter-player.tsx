@@ -24,9 +24,10 @@ import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 
 const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
-  const [threshold, setThreshold] = useStore((state) => [
+  const [threshold, setThreshold, soundRef] = useStore((state) => [
     state.threshold,
     state.setThreshold,
+    state.soundRef,
   ]);
 
   const [isRecording, setRecording] = useStore((state) => [
@@ -133,7 +134,11 @@ const MeterPlayer = () => {
     <>
       <div className="flex h-full  pt-20 text-center">
         <div className="flex flex-col space-y-5">
-          <SoundContextCreator threshold={threshold} isSound={isSound} />
+          <SoundContextCreator
+            threshold={threshold}
+            isSound={isSound}
+            sound={new Audio(soundRef)}
+          />
 
           <div className="flex place-content-center pb-4">{slider}</div>
           <form className="flex flex-col place-content-center">
