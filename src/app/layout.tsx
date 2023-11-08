@@ -15,7 +15,7 @@ const inter = Inter({
 export const metadata = {
   title: "Chut",
   description:
-    "Stay on task and keep noise levels in check with the Chut app. Chut is a noise meter app designed to help students stay productive during group work. When surrounding conversations get too loud, Chut emits an audible alert to gently remind students to lower their voices. By monitoring noise levels in real time, Chut allows students to self-regulate their volume and stay focused on the task at hand.",
+    "Chut - Application de gestion sonore en classe. Chut aide les enseignants à maintenir un niveau sonore optimal dans les salles de classe grâce à des alertes audibles en temps réel et la possibilité de télécharger ou enregistrer jusqu'à 20 sons personnalisés avec Chut Premium. Améliorez votre environnement d'apprentissage dès aujourd'hui.",
   icons: [{ rel: "icon", url: "/chut-carre.png" }],
 };
 

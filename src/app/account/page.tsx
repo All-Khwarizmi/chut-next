@@ -5,7 +5,11 @@ import { initFirebase } from "../../utils/firebase";
 import { PremiumPanel } from "./_components/premium-panel";
 import { StandardPanel } from "./_components/standard-panel";
 import { getPremiumStatus } from "./helpers/get-premium-status";
-import { deleteUser, signOut, upgradeToPremium } from "./helpers/account-helpers";
+import {
+  deleteUser,
+  signOut,
+  upgradeToPremium,
+} from "./helpers/account-helpers";
 import { useRouter } from "next/navigation";
 
 export default function AccountPage() {
@@ -58,7 +62,7 @@ export default function AccountPage() {
         className="text-center text-lg text-slate-500 hover:text-slate-300"
       >
         <div className="w-72 rounded-lg bg-orange-600 p-4 px-6 text-lg text-white shadow-lg hover:bg-orange-700">
-          Sign Out
+          Se déconnecter
         </div>
       </button>
     </div>
@@ -71,7 +75,7 @@ export default function AccountPage() {
         className="w-72 rounded-lg bg-blue-600 p-4 px-6 text-lg shadow-lg hover:bg-blue-700"
       >
         <div className="flex items-center justify-center gap-2 align-middle">
-          Upgrade To Premium
+          Passer à l'offre Premium
         </div>
       </button>
     </div>
@@ -84,7 +88,7 @@ export default function AccountPage() {
           onClick={() => deleteUser(user!, router)}
           className="w-72 rounded-lg bg-red-600 p-4 px-6 text-lg shadow-lg hover:bg-red-700"
         >
-          Delete Acccount
+          Supprimer mon compte
         </button>
       </div>
     </div>

@@ -6,7 +6,7 @@ export const PremiumPanel = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-6 h-6"
+      className="h-6 w-6"
     >
       <path
         strokeLinecap="round"
@@ -17,9 +17,9 @@ export const PremiumPanel = () => {
   );
 
   const premiumStatusPanel = (
-    <div className="text-teal-300 text-xl bg-teal-800 p-4 py-12 rounded-lg w-72 bg-opacity-30 flex gap-2 justify-center">
+    <div className="flex w-72 justify-center gap-2 rounded-lg bg-teal-800 bg-opacity-30 p-4 py-12 text-xl text-teal-300">
       {premiumStatusIcon}
-      Premium Member
+      Membre Premium
     </div>
   );
 
