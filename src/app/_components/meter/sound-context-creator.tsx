@@ -6,7 +6,7 @@ import DisplayMeter from "./display-meter";
 interface RecordProps {
   threshold: number;
   isSound: boolean;
-  sound: HTMLAudioElement;
+  sound?: HTMLAudioElement;
 }
 
 export function SoundContextCreator({

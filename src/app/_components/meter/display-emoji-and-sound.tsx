@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export interface DisplayEmojiProps {
   threshold: number;
-  sound: HTMLAudioElement;
+  sound?: HTMLAudioElement;
   isSound: boolean;
 }
 export function DisplayEmoji({ threshold, isSound, sound }: DisplayEmojiProps) {
@@ -27,25 +27,25 @@ export function DisplayEmoji({ threshold, isSound, sound }: DisplayEmojiProps) {
   useEffect(() => {
     if (isTooLoud(sessionArr, threshold) && isSound && !isSoundPlaying) {
       setIsSoundPlaying(true);
-      // const audioCtx = new AudioContext();
-      // audioCtx.resume();
-
+      const audioCtx = new AudioContext();
+      audioCtx.resume();
       // const audio = new Audio();
       // audio.src = soundRef;
-
-      sound
-        .play()
-        .then(() => {
-          setTimeout(
-            () => setIsSoundPlaying(false),
-            sound.duration * 1000 + 2000,
-          );
-        })
-        .catch((e) => {
-          setRecording(false);
-          setIsSoundPlaying(false);
-          alert(`Something wrong happened trying to display the audio: ${e}`);
-        });
+      if (sound) {
+        sound
+          .play()
+          .then(() => {
+            setTimeout(
+              () => setIsSoundPlaying(false),
+              sound.duration * 1000 + 2000,
+            );
+          })
+          .catch((e) => {
+            setRecording(false);
+            setIsSoundPlaying(false);
+            alert(`Something wrong happened trying to display the audio: ${e}`);
+          });
+      }
     }
   }, [isSoundPlaying, isSound, sessionArr.length]);
 

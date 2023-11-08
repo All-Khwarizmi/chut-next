@@ -10,7 +10,7 @@ export interface MeterProps {
   meter: Tone.Meter;
   threshold: number;
   isSound: boolean;
-  sound: HTMLAudioElement;
+  sound?: HTMLAudioElement;
 }
 
 export default function DisplayMeter({

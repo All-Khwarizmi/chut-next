@@ -24,6 +24,7 @@ import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
 
 const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
+  const [sound, setSound] = useState<HTMLAudioElement | undefined>();
   const [threshold, setThreshold, soundRef] = useStore((state) => [
     state.threshold,
     state.setThreshold,
@@ -122,7 +123,13 @@ const MeterPlayer = () => {
     <FormGroup sx={{ placeItems: "center", paddingBottom: 5, fontSize: 28 }}>
       <FormControlLabel
         control={
-          <Switch onChange={() => setIsSound(!isSound)} checked={isSound} />
+          <Switch
+            onChange={() => {
+              setIsSound(!isSound);
+              setSound(new Audio(soundRef));
+            }}
+            checked={isSound}
+          />
         }
         sx={{ fontSize: 28 }}
         label="Activer Son"
@@ -137,7 +144,7 @@ const MeterPlayer = () => {
           <SoundContextCreator
             threshold={threshold}
             isSound={isSound}
-            sound={new Audio(soundRef)}
+            sound={sound}
           />
 
           <div className="flex place-content-center pb-4">{slider}</div>
