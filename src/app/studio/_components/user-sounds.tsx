@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { ref, listAll, getDownloadURL, deleteObject } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { initFirebase, storageBucket } from "~/utils/firebase";
+import { analytics, initFirebase, storageBucket } from "~/utils/firebase";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -19,6 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import CloseIcon from "@mui/icons-material/Close";
 import AudioTest from "./try-audio";
+import { logEvent } from "firebase/analytics";
 interface UserSoundsProps {
   pathName: string;
   title: string;
@@ -287,10 +288,10 @@ const UserSounds: React.FC<UserSoundsProps> = ({ title, pathName }) => {
               selected={ele.label === soundRef}
               onClick={(_) => {
                 console.log("Event: select_content");
-                // logEvent(analytics, "select_content", {
-                //   content_type: "sound",
-                //   content_id: ele.label,
-                // });
+                logEvent(analytics, "select_content", {
+                  content_type: "sound",
+                  content_id: ele.label,
+                });
                 if (soundRef !== ele.value) {
                   setSoundRef(ele.value);
                   if (!soundOptions.some((e) => e.value === ele.value)) {

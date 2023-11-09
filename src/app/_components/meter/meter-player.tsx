@@ -14,13 +14,14 @@ import {
   Switch,
   ThemeProvider,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStore } from "~/utils/stores/stores";
 import SoundList from "~/app/studio/_components/soundtheque";
 import { theme } from "~/shared/theme";
 import { SoundContextCreator } from "./sound-context-creator";
 import { isSafariDesktop } from "~/utils/device-checker";
 import { WrongDeviceDialog } from "~/shared/wrong-device-dialog";
+import { set } from "zod";
 
 const MeterPlayer = () => {
   const [isSound, setIsSound] = useState(false);
@@ -31,6 +32,9 @@ const MeterPlayer = () => {
     state.soundRef,
   ]);
 
+  useEffect(() => {
+    setSound(new Audio(soundRef));
+  }, [soundRef]);
   const [isRecording, setRecording] = useStore((state) => [
     state.isRecording,
     state.setRecording,
