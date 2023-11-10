@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import AuthRouter from "../utils/router/auth-router";
 import Layout from "./_components/layout-component";
+import { Suspense } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({
         <AuthRouter>
           <Layout>
             <TRPCReactProvider headers={headers()}>
-              {children}
+              <Suspense fallback={<div>Loading...</div>}> {children}</Suspense>
             </TRPCReactProvider>
           </Layout>
         </AuthRouter>
